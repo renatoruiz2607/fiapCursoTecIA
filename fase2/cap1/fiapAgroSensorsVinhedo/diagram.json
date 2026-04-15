@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "author": "Renato Ruiz Cai",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 0, "left": 0, "attrs": {} },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnNitrogen",
+      "top": 121.4,
+      "left": -124.8,
+      "attrs": { "color": "green", "xray": "1", "label": "N" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnPhosphorus",
+      "top": 63.8,
+      "left": -124.8,
+      "attrs": { "color": "green", "xray": "1", "label": "P" }
+    },
+    {
+      "type": "wokwi-pushbutton",
+      "id": "btnPotassium",
+      "top": 6.2,
+      "left": -124.8,
+      "attrs": { "color": "green", "xray": "1", "label": "K" }
+    },
+    {
+      "type": "wokwi-photoresistor-sensor",
+      "id": "ldrSensor",
+      "top": 195.2,
+      "left": -239.2,
+      "attrs": {}
+    },
+    { "type": "wokwi-dht22", "id": "dhtSensor", "top": -105.3, "left": 157.8, "attrs": {} },
+    { "type": "wokwi-relay-module", "id": "waterPumpRelay", "top": 201.8, "left": 172.8, "attrs": {} }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+
+    [ "btnNitrogen:2.r", "esp:GND.1", "black", [ "v0.2", "h62.41" ] ],
+    [ "btnNitrogen:1.r", "esp:14", "green", [ "v0" ] ],
+
+    [ "btnPhosphorus:2.r", "esp:GND.1", "black", [ "h29", "v57.8" ] ],
+    [ "btnPhosphorus:1.r", "esp:27", "green", [ "v0" ] ],
+
+    [ "btnPotassium:1.r", "esp:26", "green", [ "h9.8", "v96" ] ],
+    [ "btnPotassium:2.r", "esp:GND.1", "black", [ "h19.4", "v115.4" ] ],
+
+    [ "ldrSensor:VCC", "esp:3V3", "red", [ "h57.6", "v-182.4" ] ],
+    [ "ldrSensor:GND", "esp:GND.1", "black", [ "h19.2", "v-67.6" ] ],
+    [ "ldrSensor:AO", "esp:34", "green", [ "h48", "v-173.5" ] ],
+
+    [ "dhtSensor:VCC", "esp:3V3", "red", [ "v0", "h-76.8", "v-19.2", "h-86.4" ] ],
+    [ "dhtSensor:GND", "esp:GND.2", "black", [ "v19.2" ] ],
+    [ "dhtSensor:SDA", "esp:4", "green", [ "v0" ] ],
+    
+    [ "waterPumpRelay:VCC", "esp:5V", "red", [ "h-57.6", "h-110.59" ] ],
+    [ "waterPumpRelay:GND", "esp:GND.2", "black", [ "h-9.6", "v-182.8" ] ],
+    [ "waterPumpRelay:IN", "esp:18", "green", [ "h-19.2", "v-115.4" ] ]
+  ],
+  "dependencies": {}
+}
