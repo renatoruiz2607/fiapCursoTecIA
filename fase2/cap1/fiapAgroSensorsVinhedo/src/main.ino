@@ -5,6 +5,7 @@
 #include "sensor_readings.h"
 #include "irrigation_logic.h"
 #include "serial_logger.h"
+#include "weather_input.h"
 
 // =====================================
 // FIAP Agro Sensors Vinhedo
@@ -39,6 +40,7 @@ void setup() {
   digitalWrite(WATER_PUMP_RELAY_PIN, LOW);
 
   initializeSensors();
+  initializeWeatherInput();
 
   Serial.println("Starting smart irrigation system for grapevine...");
   Serial.println();
@@ -49,6 +51,8 @@ void setup() {
 // ============================
 
 void loop() {
+  updateRainForecastFromSerial();
+
   readNpkButtons(
     nitrogenLevelOk,
     phosphorusLevelOk,
@@ -65,8 +69,11 @@ void loop() {
     temperature
   );
 
+  int rainForecastLevel = getRainForecastLevel();
+
   updateWaterPumpState(
     waterPumpOn,
+    rainForecastLevel,
     soilMoisture,
     temperature,
     phValue,
@@ -82,6 +89,8 @@ void loop() {
   );
 
   printLogTitle();
+
+  printWeatherStatus(rainForecastLevel);
 
   printNpkStatus(
     nitrogenLevelOk,
@@ -101,6 +110,7 @@ void loop() {
   );
 
   printIrrigationDecision(
+    rainForecastLevel,
     soilMoisture,
     temperature,
     phValue,
