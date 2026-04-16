@@ -98,8 +98,6 @@ void handleSerialInput() {
 // ============================
 
 void loop() {
-  // updateRainForecastFromSerial();
-  // updateRModelInputFromSerial();
   handleSerialInput();
 
   readNpkButtons(

@@ -9,8 +9,8 @@ import urllib.request
 # ============================
 
 API_BASE_URL = "https://api.openweathermap.org/data/2.5/forecast"
-# FIXME - voltar cidade,país para Vinhedo,BR
-CITY_NAME = "Ipiranga,BR"
+
+CITY_NAME = "Vinhedo,BR"
 
 FORECAST_WINDOW_COUNT = 8  # next 24h (8 * 3h)
 
