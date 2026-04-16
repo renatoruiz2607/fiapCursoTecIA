@@ -88,9 +88,15 @@ void loop() {
     potassiumLevelOk
   );
 
-  printLogTitle();
+  printSystemHeader();
 
-  printWeatherStatus(rainForecastLevel);
+  printWeatherStatus(
+    getWeatherCity(),
+    rainForecastLevel,
+    getRainForecastText(),
+    getMaxRainProbabilityPercent(),
+    getMaxRainVolumeMm()
+  );
 
   printNpkStatus(
     nitrogenLevelOk,

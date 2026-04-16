@@ -1,19 +1,20 @@
 #include <Arduino.h>
 
 #include "weather_input.h"
+#include "generated_weather_data.h"
 
 // ============================
-// GLOBAL VARIABLE
+// INTERNAL STATE
 // ============================
 
-static int rainForecastLevel = 0;
+static int rainForecastLevel = DEFAULT_RAIN_FORECAST_LEVEL;
 
 // ============================
 // INITIALIZATION
 // ============================
 
 void initializeWeatherInput() {
-  rainForecastLevel = 0;
+  rainForecastLevel = DEFAULT_RAIN_FORECAST_LEVEL;
 }
 
 // ============================
@@ -31,7 +32,6 @@ void updateRainForecastFromSerial() {
       rainForecastLevel = 1;
     }
 
-    // clean buffer (remove \n or \r)
     while (Serial.available()) {
       Serial.read();
     }
@@ -39,9 +39,29 @@ void updateRainForecastFromSerial() {
 }
 
 // ============================
-// GETTER
+// GETTERS
 // ============================
 
 int getRainForecastLevel() {
   return rainForecastLevel;
+}
+
+const char* getRainForecastText() {
+  if (rainForecastLevel == 1) {
+    return "RAIN EXPECTED";
+  }
+
+  return "NO RAIN";
+}
+
+const char* getWeatherCity() {
+  return DEFAULT_WEATHER_CITY;
+}
+
+float getMaxRainProbabilityPercent() {
+  return DEFAULT_MAX_RAIN_PROBABILITY_PERCENT;
+}
+
+float getMaxRainVolumeMm() {
+  return DEFAULT_MAX_RAIN_VOLUME_MM;
 }

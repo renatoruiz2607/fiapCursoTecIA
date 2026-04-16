@@ -7,3 +7,7 @@
 .piolibdeps/
 .vscode/
 *.log
+src/generated_weather_data.h
+__pycache__/
+*.pyc
+.env

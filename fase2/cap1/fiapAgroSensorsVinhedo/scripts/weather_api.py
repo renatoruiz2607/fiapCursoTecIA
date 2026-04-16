@@ -18,7 +18,6 @@ FORECAST_WINDOW_COUNT = 8  # next 24h (8 * 3h)
 MIN_RAIN_PROBABILITY = 0.60  # 60%
 MIN_RAIN_VOLUME_MM = 2.0     # 2mm in 3h
 
-
 # ============================
 # API ACCESS
 # ============================
@@ -33,7 +32,6 @@ def get_api_key() -> str:
 
     return api_key
 
-
 def build_forecast_url(city_name: str, api_key: str) -> str:
     query_params = urllib.parse.urlencode({
         "q": city_name,
@@ -42,7 +40,6 @@ def build_forecast_url(city_name: str, api_key: str) -> str:
     })
 
     return f"{API_BASE_URL}?{query_params}"
-
 
 def fetch_weather_forecast(url: str) -> dict:
     with urllib.request.urlopen(url) as response:
@@ -53,7 +50,6 @@ def fetch_weather_forecast(url: str) -> dict:
 
         body = response.read().decode("utf-8")
         return json.loads(body)
-
 
 # ============================
 # BUSINESS LOGIC
@@ -94,13 +90,11 @@ def analyze_rain_conditions(forecast_data: dict) -> dict:
         "max_rain_volume": max_rain_volume
     }
 
-
 def calculate_rain_forecast_level(analysis: dict) -> int:
     """
     Converts analysis to simple value for ESP32.
     """
     return 1 if analysis["relevant_rain_found"] else 0
-
 
 # ============================
 # OUTPUT
@@ -131,7 +125,6 @@ def print_summary(forecast_data: dict, analysis: dict, forecast_level: int) -> N
     print("1 = relevant rain → irrigation OFF")
     print("0 = no relevant rain → irrigation can proceed")
 
-
 # ============================
 # MAIN
 # ============================
@@ -153,7 +146,6 @@ def main():
         print("Failed to retrieve weather data.")
         print(f"Error: {error}")
         sys.exit(1)
-
 
 if __name__ == "__main__":
     main()
