@@ -18,6 +18,7 @@ void printSoilMoistureStatus(
 );
 
 void printIrrigationDecision(
+  int rainForecastLevel,
   float soilMoisture,
   float temperature,
   float phValue,
@@ -31,3 +32,7 @@ void printWaterPumpStatus(
 );
 
 void printLogTitle();
+
+void printWeatherStatus(
+  int rainForecastLevel
+);
