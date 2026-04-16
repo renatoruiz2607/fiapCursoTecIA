@@ -44,24 +44,6 @@ void setup() {
   initializeWeatherInput();
   initializeRModelInput();
 
-  delay(200);
-
-  readNpkButtons(
-    nitrogenLevelOk,
-    phosphorusLevelOk,
-    potassiumLevelOk
-  );
-
-  readPhSensor(
-    phRawValue,
-    phValue
-  );
-
-  readSoilMoistureSensor(
-    soilMoisture,
-    temperature
-  );
-
   Serial.println("Starting smart irrigation system for grapevine...");
   Serial.println();
 }
