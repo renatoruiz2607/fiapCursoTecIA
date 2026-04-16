@@ -34,9 +34,54 @@ void printWeatherStatus(
   Serial.print(maxRainVolumeMm, 2);
   Serial.println(" mm");
 
+  Serial.print("Input rain forecast level: ");
+  Serial.println(rainForecastLevel);
+
   Serial.println("Type 1 for rain expected or 0 for no rain");
 
   Serial.println("=========================");
+}
+
+void printRModelStatus(
+  const char* rModelMode,
+  float modelSoilMoisture,
+  float modelPhValue,
+  int modelActiveNutrients,
+  int modelPotassiumOk,
+  int modelRainForecastLevel,
+  float irrigationProbability,
+  const char* irrigationText
+) {
+  Serial.println("===== R MODEL STATUS =====");
+
+  Serial.print("R model mode: ");
+  Serial.println(rModelMode);
+
+  Serial.print("Model soil moisture: ");
+  Serial.println(modelSoilMoisture, 2);
+
+  Serial.print("Model pH value: ");
+  Serial.println(modelPhValue, 2);
+
+  Serial.print("Model active nutrients: ");
+  Serial.println(modelActiveNutrients);
+
+  Serial.print("Model potassium OK: ");
+  Serial.println(modelPotassiumOk);
+
+  Serial.print("Model rain forecast level: ");
+  Serial.println(modelRainForecastLevel);
+
+  Serial.print("Irrigation probability: ");
+  Serial.print(irrigationProbability * 100.0f, 2);
+  Serial.println("%");
+
+  Serial.print("Model decision: ");
+  Serial.println(irrigationText);
+
+  Serial.println("Input: Type r1 (irrigate), r0 (do not irrigate), ra (auto)");
+
+  Serial.println("==========================");
 }
 
 void printNpkStatus(
@@ -100,6 +145,7 @@ void printSoilMoistureStatus(
 
 void printIrrigationDecision(
   int rainForecastLevel,
+  int rModelIrrigationDecision,
   float soilMoisture,
   float temperature,
   float phValue,
@@ -112,6 +158,9 @@ void printIrrigationDecision(
   if (rainForecastLevel == 1) {
     Serial.println("Decision: OFF");
     Serial.println("Reason: Rain forecast indicates precipitation");
+  } else if (rModelIrrigationDecision == 0) {
+    Serial.println("Decision: OFF");
+    Serial.println("Reason: R statistical model recommends not irrigating");
   } else if (isnan(soilMoisture) || isnan(temperature)) {
     Serial.println("Decision: OFF");
     Serial.println("Reason: DHT22 reading failed");
@@ -133,7 +182,7 @@ void printIrrigationDecision(
     Serial.println("Reason: Minimum nutrient combination not reached");
   } else {
     Serial.println("Decision: ON");
-    Serial.println("Reason: All irrigation conditions were satisfied");
+    Serial.println("Reason: Local rules and R statistical model both allow irrigation");
   }
 
   Serial.println("================================");

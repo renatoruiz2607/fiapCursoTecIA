@@ -26,8 +26,13 @@ int countActiveNutrients(
   return activeNutrients;
 }
 
+bool shouldBlockIrrigationByRain(int rainForecastLevel) {
+  return rainForecastLevel == 1;
+}
+
 bool shouldTurnWaterPumpOn(
   int rainForecastLevel,
+  int rModelIrrigationDecision,
   float soilMoisture,
   float temperature,
   float phValue,
@@ -36,6 +41,10 @@ bool shouldTurnWaterPumpOn(
   bool potassiumLevelOk
 ) {
   if (shouldBlockIrrigationByRain(rainForecastLevel)) {
+    return false;
+  }
+
+  if (rModelIrrigationDecision == 0) {
     return false;
   }
 
@@ -63,6 +72,7 @@ bool shouldTurnWaterPumpOn(
 void updateWaterPumpState(
   bool& waterPumpOn,
   int rainForecastLevel,
+  int rModelIrrigationDecision,
   float soilMoisture,
   float temperature,
   float phValue,
@@ -72,6 +82,7 @@ void updateWaterPumpState(
 ) {
   waterPumpOn = shouldTurnWaterPumpOn(
     rainForecastLevel,
+    rModelIrrigationDecision,
     soilMoisture,
     temperature,
     phValue,
@@ -81,10 +92,4 @@ void updateWaterPumpState(
   );
 
   digitalWrite(WATER_PUMP_RELAY_PIN, waterPumpOn ? HIGH : LOW);
-}
-
-bool shouldBlockIrrigationByRain(
-  int rainForecastLevel
-) {
-  return rainForecastLevel == 1;
 }

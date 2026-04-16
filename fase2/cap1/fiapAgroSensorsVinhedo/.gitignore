@@ -8,6 +8,7 @@
 .vscode/
 *.log
 src/generated_weather_data.h
+src/generated_irrigation_model_data.h
 __pycache__/
 *.pyc
 .env

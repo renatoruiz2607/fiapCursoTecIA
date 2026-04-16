@@ -75,10 +75,11 @@ def main() -> None:
 
     OUTPUT_HEADER_PATH.write_text(header_content, encoding="utf-8")
 
+    print(f"=== WEATHER API RESULT ==")
     print(f"Weather header generated at: {OUTPUT_HEADER_PATH}")
     print(f"City: {full_city_name}")
     print(f"Rain forecast level: {forecast_level}")
     print(f"Max rain probability: {analysis['max_pop'] * 100:.2f}%")
-    print(f"Max rain volume: {analysis['max_rain_volume']:.2f} mm")
+    print(f"Max rain volume: {analysis['max_rain_volume']:.2f} mm\n")
 
 main()

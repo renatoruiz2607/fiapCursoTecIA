@@ -21,21 +21,8 @@ void initializeWeatherInput() {
 // SERIAL INPUT HANDLER
 // ============================
 
-void updateRainForecastFromSerial() {
-  if (Serial.available() > 0) {
-    char input = Serial.read();
-
-    if (input == '0') {
-      rainForecastLevel = 0;
-    } 
-    else if (input == '1') {
-      rainForecastLevel = 1;
-    }
-
-    while (Serial.available()) {
-      Serial.read();
-    }
-  }
+void setRainForecastLevel(int level) {
+  rainForecastLevel = level;
 }
 
 // ============================

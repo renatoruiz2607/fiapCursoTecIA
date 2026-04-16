@@ -2,7 +2,7 @@
 
 void initializeWeatherInput();
 
-void updateRainForecastFromSerial();
+void setRainForecastLevel(int level);
 
 int getRainForecastLevel();
 
