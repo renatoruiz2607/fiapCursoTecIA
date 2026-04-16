@@ -4,6 +4,7 @@
 // =====================================
 // FIAP Agro Sensors Vinhedo
 // NPK Buttons + LDR + DHT22 + Relay
+// Smart Irrigation System for Grapevine
 // =====================================
 
 // ============================
@@ -23,6 +24,15 @@ const int WATER_PUMP_RELAY_PIN = 18;
 
 #define DHTTYPE DHT22
 DHT dht(DHT_SENSOR_PIN, DHTTYPE);
+
+// ============================
+// IRRIGATION RULE CONSTANTS
+// ============================
+
+const float MIN_SOIL_MOISTURE = 50.0f;
+const float MIN_PH = 5.5f;
+const float MAX_PH = 6.5f;
+const int MIN_ACTIVE_NUTRIENTS = 2;
 
 // ============================
 // GLOBAL VARIABLES
@@ -77,11 +87,55 @@ void readSoilMoistureSensor() {
 }
 
 // ============================
-// FUNCTION: Test Water Pump Relay
+// FUNCTION: Count Active Nutrients
 // ============================
 
-void testWaterPumpRelay() {
-  waterPumpOn = !waterPumpOn;
+int countActiveNutrients() {
+  int activeNutrients = 0;
+
+  if (nitrogenLevelOk) {
+    activeNutrients++;
+  }
+
+  if (phosphorusLevelOk) {
+    activeNutrients++;
+  }
+
+  if (potassiumLevelOk) {
+    activeNutrients++;
+  }
+
+  return activeNutrients;
+}
+
+// ============================
+// FUNCTION: Check Irrigation Rule
+// ============================
+
+bool shouldTurnWaterPumpOn() {
+  if (isnan(soilMoisture) || isnan(temperature)) {
+    return false;
+  }
+
+  int activeNutrients = countActiveNutrients();
+
+  bool isSoilMoistureLow = soilMoisture < MIN_SOIL_MOISTURE;
+  bool isPhInRange = phValue >= MIN_PH && phValue <= MAX_PH;
+  bool isPotassiumOk = potassiumLevelOk;
+  bool hasMinimumActiveNutrients = activeNutrients >= MIN_ACTIVE_NUTRIENTS;
+
+  return isSoilMoistureLow &&
+         isPhInRange &&
+         isPotassiumOk &&
+         hasMinimumActiveNutrients;
+}
+
+// ============================
+// FUNCTION: Update Water Pump State
+// ============================
+
+void updateWaterPumpState() {
+  waterPumpOn = shouldTurnWaterPumpOn();
   digitalWrite(WATER_PUMP_RELAY_PIN, waterPumpOn ? HIGH : LOW);
 }
 
@@ -100,6 +154,9 @@ void printNpkStatus() {
 
   Serial.print("Potassium: ");
   Serial.println(potassiumLevelOk ? "OK" : "LOW");
+
+  Serial.print("Active nutrients: ");
+  Serial.println(countActiveNutrients());
 
   Serial.println("======================");
 }
@@ -143,6 +200,36 @@ void printSoilMoistureStatus() {
 }
 
 // ============================
+// FUNCTION: Print Irrigation Rule Status
+// ============================
+
+void printIrrigationDecision() {
+  Serial.println("===== IRRIGATION DECISION =====");
+
+  if (isnan(soilMoisture) || isnan(temperature)) {
+    Serial.println("Decision: OFF");
+    Serial.println("Reason: DHT22 reading failed");
+  } else if (soilMoisture >= MIN_SOIL_MOISTURE) {
+    Serial.println("Decision: OFF");
+    Serial.println("Reason: Soil moisture is sufficient");
+  } else if (phValue < MIN_PH || phValue > MAX_PH) {
+    Serial.println("Decision: OFF");
+    Serial.println("Reason: Soil pH is out of ideal range for grapevine");
+  } else if (!potassiumLevelOk) {
+    Serial.println("Decision: OFF");
+    Serial.println("Reason: Potassium level is not adequate");
+  } else if (countActiveNutrients() < MIN_ACTIVE_NUTRIENTS) {
+    Serial.println("Decision: OFF");
+    Serial.println("Reason: Minimum nutrient combination not reached");
+  } else {
+    Serial.println("Decision: ON");
+    Serial.println("Reason: All irrigation conditions were satisfied");
+  }
+
+  Serial.println("================================");
+}
+
+// ============================
 // FUNCTION: Print Water Pump Status
 // ============================
 
@@ -171,7 +258,7 @@ void setup() {
 
   dht.begin();
 
-  Serial.println("Starting full sensor and relay test...");
+  Serial.println("Starting smart irrigation system for grapevine...");
   Serial.println();
 }
 
@@ -183,11 +270,12 @@ void loop() {
   readNpkButtons();
   readPhSensor();
   readSoilMoistureSensor();
-  testWaterPumpRelay();
+  updateWaterPumpState();
 
   printNpkStatus();
   printPhStatus();
   printSoilMoistureStatus();
+  printIrrigationDecision();
   printWaterPumpStatus();
 
   delay(2000);
