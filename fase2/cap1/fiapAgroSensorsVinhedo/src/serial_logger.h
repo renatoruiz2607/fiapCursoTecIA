@@ -1,5 +1,15 @@
 #pragma once
 
+void printSystemHeader();
+
+void printWeatherStatus(
+  const char* weatherCity,
+  int rainForecastLevel,
+  const char* rainForecastText,
+  float maxRainProbabilityPercent,
+  float maxRainVolumeMm
+);
+
 void printNpkStatus(
   bool nitrogenLevelOk,
   bool phosphorusLevelOk,
@@ -29,10 +39,4 @@ void printIrrigationDecision(
 
 void printWaterPumpStatus(
   bool waterPumpOn
-);
-
-void printLogTitle();
-
-void printWeatherStatus(
-  int rainForecastLevel
 );

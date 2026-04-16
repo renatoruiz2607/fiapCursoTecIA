@@ -4,6 +4,41 @@
 #include "irrigation_logic.h"
 #include "serial_logger.h"
 
+void printSystemHeader() {
+  Serial.println("===== AGRO SENSORS VINHEDO =====");
+}
+
+void printWeatherStatus(
+  const char* weatherCity,
+  int rainForecastLevel,
+  const char* rainForecastText,
+  float maxRainProbabilityPercent,
+  float maxRainVolumeMm
+) {
+  Serial.println("===== WEATHER STATUS =====");
+
+  Serial.print("Weather city: ");
+  Serial.println(weatherCity);
+
+  Serial.print("Rain forecast level: ");
+  Serial.println(rainForecastLevel);
+
+  Serial.print("Rain forecast: ");
+  Serial.println(rainForecastText);
+
+  Serial.print("Max probability of rain: ");
+  Serial.print(maxRainProbabilityPercent, 2);
+  Serial.println("%");
+
+  Serial.print("Max rain volume (3h): ");
+  Serial.print(maxRainVolumeMm, 2);
+  Serial.println(" mm");
+
+  Serial.println("Type 1 for rain expected or 0 for no rain");
+
+  Serial.println("=========================");
+}
+
 void printNpkStatus(
   bool nitrogenLevelOk,
   bool phosphorusLevelOk,
@@ -12,13 +47,13 @@ void printNpkStatus(
 ) {
   Serial.println("===== NPK STATUS =====");
 
-  Serial.print("Nitrogen: ");
+  Serial.print("Nitrogen level: ");
   Serial.println(nitrogenLevelOk ? "ADEQUATE" : "INSUFFICIENT");
 
-  Serial.print("Phosphorus: ");
+  Serial.print("Phosphorus level: ");
   Serial.println(phosphorusLevelOk ? "ADEQUATE" : "INSUFFICIENT");
 
-  Serial.print("Potassium: ");
+  Serial.print("Potassium level: ");
   Serial.println(potassiumLevelOk ? "ADEQUATE" : "INSUFFICIENT");
 
   Serial.print("Active nutrients: ");
@@ -112,27 +147,4 @@ void printWaterPumpStatus(
   Serial.println(waterPumpOn ? "ON" : "OFF");
   Serial.println("=============================");
   Serial.println();
-}
-
-void printLogTitle() {
-    Serial.println("===== AGRO SENSORS VINHEDO =====");
-}
-
-void printWeatherStatus(int rainForecastLevel) {
-  Serial.println("===== WEATHER STATUS =====");
-
-  Serial.print("Rain forecast level: ");
-  Serial.println(rainForecastLevel);
-
-  Serial.print("Rain forecast: ");
-
-  if (rainForecastLevel == 1) {
-    Serial.println("RAIN EXPECTED");
-  } else {
-    Serial.println("NO RAIN");
-  }
-
-  Serial.println("Input: Type 1 (rain expected) or 0 (no rain)");
-
-  Serial.println("=========================");
 }
