@@ -6,6 +6,7 @@
 #include "irrigation_logic.h"
 #include "serial_logger.h"
 #include "weather_input.h"
+#include "r_model_input.h"
 
 // =====================================
 // FIAP Agro Sensors Vinhedo
@@ -41,9 +42,37 @@ void setup() {
 
   initializeSensors();
   initializeWeatherInput();
+  initializeRModelInput();
 
   Serial.println("Starting smart irrigation system for grapevine...");
   Serial.println();
+}
+
+// ============================
+// HANDLE SERIAL INPUTS
+// ============================
+
+void handleSerialInput() {
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n');
+    input.trim();
+
+    // WEATHER INPUT
+    if (input == "0") {
+      setRainForecastLevel(0);
+    } else if (input == "1") {
+      setRainForecastLevel(1);
+    }
+
+    // R MODEL INPUT
+    else if (input == "r0") {
+      setRModelManualDecision(0);
+    } else if (input == "r1") {
+      setRModelManualDecision(1);
+    } else if (input == "ra") {
+      resetRModelToAuto();
+    }
+  }
 }
 
 // ============================
@@ -51,7 +80,7 @@ void setup() {
 // ============================
 
 void loop() {
-  updateRainForecastFromSerial();
+  handleSerialInput();
 
   readNpkButtons(
     nitrogenLevelOk,
@@ -70,10 +99,12 @@ void loop() {
   );
 
   int rainForecastLevel = getRainForecastLevel();
+  int rModelIrrigationDecision = getRModelIrrigationDecision();
 
   updateWaterPumpState(
     waterPumpOn,
     rainForecastLevel,
+    rModelIrrigationDecision,
     soilMoisture,
     temperature,
     phValue,
@@ -98,6 +129,17 @@ void loop() {
     getMaxRainVolumeMm()
   );
 
+  printRModelStatus(
+    getRModelMode(),
+    getRModelSoilMoisture(),
+    getRModelPhValue(),
+    getRModelActiveNutrients(),
+    getRModelPotassiumOk(),
+    getRModelRainForecastLevel(),
+    getRModelIrrigationProbability(),
+    getRModelIrrigationText()
+  );
+
   printNpkStatus(
     nitrogenLevelOk,
     phosphorusLevelOk,
@@ -117,6 +159,7 @@ void loop() {
 
   printIrrigationDecision(
     rainForecastLevel,
+    rModelIrrigationDecision,
     soilMoisture,
     temperature,
     phValue,

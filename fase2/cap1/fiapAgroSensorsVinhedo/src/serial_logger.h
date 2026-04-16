@@ -10,6 +10,17 @@ void printWeatherStatus(
   float maxRainVolumeMm
 );
 
+void printRModelStatus(
+  const char* rModelMode,
+  float modelSoilMoisture,
+  float modelPhValue,
+  int modelActiveNutrients,
+  int modelPotassiumOk,
+  int modelRainForecastLevel,
+  float irrigationProbability,
+  const char* irrigationText
+);
+
 void printNpkStatus(
   bool nitrogenLevelOk,
   bool phosphorusLevelOk,
@@ -29,6 +40,7 @@ void printSoilMoistureStatus(
 
 void printIrrigationDecision(
   int rainForecastLevel,
+  int rModelIrrigationDecision,
   float soilMoisture,
   float temperature,
   float phValue,
