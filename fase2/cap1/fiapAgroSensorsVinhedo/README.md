@@ -136,12 +136,27 @@ A simulação do circuito foi realizada utilizando a plataforma Wokwi, com integ
 
 ## 🧠 Lógica de Decisão de Irrigação
 
-O sistema de irrigação foi desenvolvido com base na combinação de duas abordagens:
+O sistema de irrigação foi desenvolvido com base na combinação de três abordagens:
 
 - **Regras determinísticas** (baseadas em conhecimento agronômico da cultura da uva)
-- **Modelo estatístico** (regressão logística em R)
+- **Análise climática via API (OpenWeather)**
+- **Modelo estatístico (regressão logística em R)**
 
-A decisão final de irrigação considera ambas as camadas de forma integrada.
+A decisão final de irrigação considera todas essas camadas de forma integrada.
+
+
+### 🌧️ Análise Climática (OpenWeather)
+
+O sistema utiliza a API OpenWeather para avaliar a previsão de chuva nas próximas horas.
+
+A irrigação é bloqueada quando são identificadas condições relevantes de precipitação, considerando simultaneamente:
+
+- **Probabilidade de chuva (POP) ≥ 60%**
+- **Volume de chuva previsto ≥ 2.0 mm**
+
+Ou seja:
+
+`Chuva relevante = POP ≥ 0.6 E Volume ≥ 2.0 mm`
 
 
 ### 🌱 Regras Determinísticas
@@ -149,7 +164,7 @@ A decisão final de irrigação considera ambas as camadas de forma integrada.
 A irrigação só é permitida quando **todas as condições abaixo são atendidas**:
 
 - **Ausência de chuva prevista**  
-  A irrigação é bloqueada caso haja previsão de chuva.
+  A irrigação é bloqueada caso a análise climática identifique chuva suficiente.
 
 - **Umidade do solo abaixo do limite mínimo**  
   O solo deve estar com umidade inferior ao valor configurado para permitir irrigação.
@@ -186,7 +201,12 @@ O modelo retorna:
 
 A decisão final do sistema segue a seguinte lógica:
 
-Irrigar SE Regras Determinísticas ok E Modelo Estatístico ok
+Irrigar SE:
+- Não houver chuva relevante (API)
+E
+- Regras determinísticas forem atendidas
+E
+- Modelo estatístico recomendar irrigação
 
 ## 🎥 Vídeo demonstrativo
 
