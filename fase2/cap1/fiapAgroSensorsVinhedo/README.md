@@ -188,6 +188,10 @@ A decisão final do sistema segue a seguinte lógica:
 
 Irrigar SE Regras Determinísticas ok E Modelo Estatístico ok
 
+## 🎥 Vídeo demonstrativo
+
+▶️ [Assistir no YouTube](https://www.youtube.com/watch?v=AXcdfUI0DlU)
+
 
 ## 🗃 Histórico de lançamentos
 
