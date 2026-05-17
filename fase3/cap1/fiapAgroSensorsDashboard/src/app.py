@@ -30,7 +30,7 @@ st.title("📊 Dashboard Agro Sensors")
 
 st.write(
     """
-    Dashboard desenvolvido para visualizar dados simulados de irrigação agrícola,
+    Dashboard desenvolvido para visualizar dados de irrigação agrícola,
     incluindo umidade do solo, pH, níveis de nutrientes e decisões de irrigação.
     """
 )
@@ -54,10 +54,14 @@ try:
     total_rain_blocked_scenarios = data[
         (data["rain_forecast_level"] == 1) & (data["should_irrigate"] == 0)
     ].shape[0]
+    total_valid_nutrient_scenarios = data[
+        (data["active_nutrients"] >= 2) &
+        (data["potassium_ok"] == 1)
+    ].shape[0]
 
     st.subheader("📌 Métricas principais")
 
-    col1, col2, col3, col4 = st.columns(4)
+    col1, col2, col3, col4, col5 = st.columns(5)
 
     with col1:
         st.metric(
@@ -81,6 +85,65 @@ try:
         st.metric(
             label="Bloqueados por chuva",
             value=total_rain_blocked_scenarios
+        )
+
+    with col5:
+        st.metric(
+            label="Nutrientes adequados",
+            value=total_valid_nutrient_scenarios
+        )
+
+    # ============================
+    # CHARTS
+    # ============================
+
+    st.subheader("📈 Gráficos de análise")
+
+    col_chart1, col_chart2 = st.columns(2)
+
+    with col_chart1:
+        st.markdown("**Distribuição da umidade do solo**")
+        st.bar_chart(data["soil_moisture"])
+
+    with col_chart2:
+        st.markdown("**Distribuição do pH do solo**")
+        st.line_chart(data["ph_value"])
+
+    col_chart3, col_chart4 = st.columns(2)
+
+    col_chart3, col_chart4 = st.columns(2)
+
+    with col_chart3:
+        st.markdown("**Umidade média por decisão de irrigação**")
+
+        moisture_by_decision = (
+            data.assign(
+                irrigation_decision=data["should_irrigate"].map({
+                    0: "Não irrigar",
+                    1: "Irrigar"
+                })
+            )
+            .groupby("irrigation_decision")["soil_moisture"]
+            .mean()
+            .sort_values()
+        )
+
+        st.bar_chart(moisture_by_decision)
+
+    with col_chart4:
+        st.markdown("**Relação entre pH e umidade por decisão de irrigação**")
+
+        scatter_data = data.copy()
+        scatter_data["decision_label"] = scatter_data["should_irrigate"].map({
+            0: "Não irrigar",
+            1: "Irrigar"
+        })
+
+        st.scatter_chart(
+            scatter_data,
+            x="ph_value",
+            y="soil_moisture",
+            color="decision_label"
         )
 
     st.subheader("📄 Base de dados de irrigação")
