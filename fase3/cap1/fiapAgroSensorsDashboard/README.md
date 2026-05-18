@@ -195,7 +195,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ## 🎥 Vídeo demonstrativo
 
-▶️ [Assistir no YouTube](https://www.youtube.com/watch?v=AXcdfUI0DlU)
+▶️ [Assistir no YouTube](https://youtu.be/AwBpLbfZREM)
 
 
 ## 🗃 Histórico de lançamentos
