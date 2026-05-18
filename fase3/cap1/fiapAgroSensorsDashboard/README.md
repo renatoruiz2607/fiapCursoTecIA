@@ -111,7 +111,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
   *A maior parte dos cenários apresentou condições nutricionais adequadas, considerando a presença de potássio e pelo menos dois nutrientes ativos.*
   
 <p align="center">
-  <img src="assets/wokwiCircuit.png" width="600"/>
+  <img src="assets/metrics.png" width="600"/>
 </p>
 
 <p align="center">
@@ -132,11 +132,11 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 *O comportamento apresentado demonstra diferentes condições hídricas do solo, contribuindo para análises mais completas da tomada de decisão da irrigação.*
   
 <p align="center">
-  <img src="assets/wokwiCircuit.png" width="600"/>
+  <img src="assets/soilMoistureDistribution.png" width="600"/>
 </p>
 
 <p align="center">
-  <i>Distribuição de umidade de solo</i>
+  <i>Distribuição de umidade do solo</i>
 </p>
 
 ***Distribuição do pH do solo***
@@ -150,7 +150,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 *O comportamento do gráfico demonstra diferentes condições químicas do solo, permitindo que a lógica de decisão considere cenários mais variados durante a análise da irrigação.*
 
 <p align="center">
-  <img src="assets/wokwiCircuit.png" width="600"/>
+  <img src="assets/phDistribution.png" width="600"/>
 </p>
 
 <p align="center">
@@ -168,7 +168,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 *Já os cenários classificados como “**Não irrigar**” apresentam níveis médios de umidade mais elevados, indicando condições em que o solo já possui quantidade adequada de água para a plantação.*
 
 <p align="center">
-  <img src="assets/wokwiCircuit.png" width="600"/>
+  <img src="assets/meanSoilMoisture.png" width="600"/>
 </p>
 
 <p align="center">
@@ -186,7 +186,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 *O comportamento visual do gráfico evidencia a combinação entre condições hídricas e químicas do solo na lógica de decisão implementada no projeto.*
 
 <p align="center">
-  <img src="assets/wokwiCircuit.png" width="600"/>
+  <img src="assets/irrigationDecisionRelation.png" width="600"/>
 </p>
 
 <p align="center">
