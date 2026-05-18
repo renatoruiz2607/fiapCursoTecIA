@@ -36,7 +36,9 @@
 
 *Fase 2 está disponível em: **fiapCursoTecIA/fase2/cap1/fiapAgroSensorsVinhedo**.*
 
-*Fase 3 está disponível em: **fiapCursoTecIA/fase3/cap1/fiapAgroSensorsDashboard**.*
+*Fase 3:*
+- *Dashboard em Python (Ir Além - Opção 1) está disponível em: **fiapCursoTecIA/fase3/cap1/fiapAgroSensorsDashboard**.*
+- *Consulta em Banco de Dados (Entrega Obrigatória) está disponível em: **fiapCursoTecIA/fase3/cap1/fiapAgroSensorsDashboard/scripts/README.md**.*
 
 
 ## 📋 Licença
