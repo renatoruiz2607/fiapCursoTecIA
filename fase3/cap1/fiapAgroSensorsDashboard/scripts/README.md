@@ -39,7 +39,7 @@
 **1. Consulta da base completa de dados**
 
 <p align="center">
-  <img src="assets/selectFromSensores.png" width="600"/>
+  <img src="../assets/selectFromSensores.png" width="600"/>
 </p>
 
 <p align="center">
@@ -49,7 +49,7 @@
 **2. Consulta da quantidade total de registros**
 
 <p align="center">
-  <img src="assets/countTotalRegistros.png" width="600"/>
+  <img src="../assets/countTotalRegistros.png" width="600"/>
 </p>
 
 <p align="center">
@@ -61,7 +61,7 @@
 *A consulta permitiu identificar a distribuição das decisões de irrigação presentes no dataset. Os resultados demonstram que **60%** dos registros indicam cenários em que a irrigação não é recomendada, enquanto **40%** representam situações em que o sistema recomenda irrigar.*
 
 <p align="center">
-  <img src="assets/distPctDecisaoIrrigacao.png" width="600"/>
+  <img src="../assets/distPctDecisaoIrrigacao.png" width="600"/>
 </p>
 
 <p align="center">
@@ -75,7 +75,7 @@
 *Também foi possível observar pequenas variações nos níveis médios de pH, nutrientes ativos e presença de potássio entre os cenários analisados. Além disso, os registros sem recomendação de irrigação apresentaram maior média de previsão de chuva, reforçando a influência das condições climáticas no processo de decisão.*
 
 <p align="center">
-  <img src="assets/meanByDecisao.png" width="600"/>
+  <img src="../assets/meanByDecisao.png" width="600"/>
 </p>
 
 <p align="center">
@@ -89,7 +89,7 @@
 *Os resultados demonstram que baixos níveis de umidade possuem forte influência na tomada de decisão do sistema, principalmente quando combinados com ausência de previsão de chuva e condições adequadas de nutrientes e potássio no solo.*
 
 <p align="center">
-  <img src="assets/criticalLowMoisture.png" width="600"/>
+  <img src="../assets/criticalLowMoisture.png" width="600"/>
 </p>
 
 <p align="center">
@@ -109,7 +109,7 @@
 - *Potássio ausente: **3** registros*
 
 <p align="center">
-  <img src="assets/lowMoistureIrrigationOff.png" width="600"/>
+  <img src="../assets/lowMoistureIrrigationOff.png" width="600"/>
 </p>
 
 <p align="center">
@@ -121,7 +121,7 @@
 *A consulta demonstrou que a previsão de chuva possui forte influência na decisão do sistema de irrigação. Todos os registros com previsão de chuva indicaram cenários em que a irrigação não foi recomendada, mesmo quando outras condições poderiam favorecer a irrigação.*
 
 <p align="center">
-  <img src="assets/rainImpact.png" width="600"/>
+  <img src="../assets/rainImpact.png" width="600"/>
 </p>
 
 <p align="center">
@@ -133,7 +133,7 @@
 *A consulta demonstrou que a presença de potássio possui influência direta na recomendação de irrigação. Todos os cenários em que o potássio estava ausente resultaram em decisões sem irrigação, indicando que o sistema considera esse nutriente como um fator essencial para a saúde e equilíbrio do solo.*
 
 <p align="center">
-  <img src="assets/potassiumImpact.png" width="600"/>
+  <img src="../assets/potassiumImpact.png" width="600"/>
 </p>
 
 <p align="center">
@@ -147,7 +147,7 @@
 *Também foi possível observar que os casos de umidade moderada ficaram mais distribuídos entre irrigar e não irrigar, indicando que nessa faixa outros fatores, como previsão de chuva, nutrientes e condições químicas do solo, possuem maior influência na decisão final do sistema.*
 
 <p align="center">
-  <img src="assets/moistureCategories.png" width="600"/>
+  <img src="../assets/moistureCategories.png" width="600"/>
 </p>
 
 <p align="center">
@@ -159,7 +159,7 @@
 *Consulta realizada para identificar registros ideais para treinamento do modelo, onde todos os critétios para irrigação estão sendo atendidos.*
 
 <p align="center">
-  <img src="assets/idealTrainingScenarios.png" width="600"/>
+  <img src="../assets/idealTrainingScenarios.png" width="600"/>
 </p>
 
 <p align="center">
