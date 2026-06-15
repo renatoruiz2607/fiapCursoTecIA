@@ -1,12 +1,12 @@
 #include "sensor_readings.h"
+#include "productivity_engine.h"
 
 SensorReadings sensors;
+ProductivityEngine productivityEngine;
 
 void setup() {
     Serial.begin(115200);
     sensors.begin();
-
-    Serial.println("AgroSensorsIntelligence iniciado");
 }
 
 void loop() {
@@ -16,6 +16,16 @@ void loop() {
     float luminosity = sensors.getLuminosity();
     float temperature = sensors.getTemperature();
     float airHumidity = sensors.getAirHumidity();
+
+    float productivityIndex = productivityEngine.calculateProductivityIndex(
+        soilMoisture,
+        ph,
+        luminosity,
+        nutrientsLevel
+    );
+
+    String productivityClassification =
+        productivityEngine.classifyProductivity(productivityIndex);
 
     Serial.print("soil_moisture=");
     Serial.print(soilMoisture, 1);
@@ -33,7 +43,13 @@ void loop() {
     Serial.print(temperature, 1);
 
     Serial.print(";air_humidity=");
-    Serial.println(airHumidity, 1);
+    Serial.print(airHumidity, 1);
+
+    Serial.print(";productivity_index=");
+    Serial.print(productivityIndex, 1);
+
+    Serial.print(";productivity_classification=");
+    Serial.println(productivityClassification);
 
     delay(3000);
 }

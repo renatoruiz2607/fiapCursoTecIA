@@ -15,12 +15,15 @@ def parse_sensor_line(line):
         if "=" not in part:
             continue
 
-        key, value = part.split("=")
+        key, value = part.split("=", 1)
+
+        key = key.strip()
+        value = value.strip()
 
         try:
-            sensor_data[key.strip()] = float(value.strip())
+            sensor_data[key] = float(value)
         except ValueError:
-            pass
+            sensor_data[key] = value
 
     return sensor_data
 
