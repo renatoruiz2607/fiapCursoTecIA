@@ -22,7 +22,7 @@
 
 ## 📜 Descrição
 
-*Este repositório contém os materiais organizados referentes ao **Capítulo 1 da Fase 2** do curso de **Tecnologia em Inteligência Artificial**.*
+*Este repositório contém os materiais organizados referentes ao **Capítulo 1 das Fases 2 e 3** do curso de **Tecnologia em Inteligência Artificial**.*
 
 
 ## 📁 Estrutura
@@ -32,7 +32,13 @@
 
 ## 📌 Projeto Principal
 
-*A descrição completa do projeto, incluindo arquitetura, implementação e documentação detalhada, está disponível em: **fiapCursoTecIA/fase2/cap1/fiapAgroSensorsVinhedo**.*
+*A descrição completa dos projetos inclui arquitetura, implementação e documentação detalhada.*
+
+*Fase 2 está disponível em: **fiapCursoTecIA/fase2/cap1/fiapAgroSensorsVinhedo**.*
+
+*Fase 3:*
+- *Dashboard em Python (Ir Além - Opção 1) está disponível em: **fiapCursoTecIA/fase3/cap1/fiapAgroSensorsDashboard**.*
+- *Consulta em Banco de Dados (Entrega Obrigatória) está disponível em: **fiapCursoTecIA/fase3/cap1/fiapAgroSensorsDashboard/scripts/README.md**.*
 
 
 ## 📋 Licença
