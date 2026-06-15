@@ -1,0 +1,12 @@
+*.csv
+*.tsv
+*.xls
+*.xlsx
+.pio/
+.pioenvs/
+.piolibdeps/
+.vscode/
+*.log
+__pycache__/
+*.pyc
+.env
