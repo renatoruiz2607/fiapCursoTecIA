@@ -1,48 +1,39 @@
-#include <DHT.h>
-#include "pins.h"
+#include "sensor_readings.h"
 
-#define DHTTYPE DHT22
-
-DHT dht(DHT_PIN, DHTTYPE);
+SensorReadings sensors;
 
 void setup() {
-  Serial.begin(115200);
-  dht.begin();
+    Serial.begin(115200);
+    sensors.begin();
 
-  Serial.println("AgroSensorsIntelligence iniciado");
+    Serial.println("AgroSensorsIntelligence iniciado");
 }
 
 void loop() {
+    float soilMoisture = sensors.getSoilMoisture();
+    float ph = sensors.getPH();
+    float nutrientsLevel = sensors.getNutrients();
+    float luminosity = sensors.getLuminosity();
+    float temperature = sensors.getTemperature();
+    float airHumidity = sensors.getAirHumidity();
 
-  int phRaw = analogRead(PH_SENSOR_PIN);
-  int soilRaw = analogRead(SOIL_MOISTURE_PIN);
-  int nutrientsRaw = analogRead(NUTRIENTS_PIN);
-  int ldrRaw = analogRead(LDR_PIN);
+    Serial.print("soil_moisture=");
+    Serial.print(soilMoisture, 1);
 
-  float temperature = dht.readTemperature();
-  float humidity = dht.readHumidity();
+    Serial.print(";ph=");
+    Serial.print(ph, 1);
 
-  Serial.println("=== Sensores ===");
+    Serial.print(";nutrients_level=");
+    Serial.print(nutrientsLevel, 1);
 
-  Serial.print("pH RAW: ");
-  Serial.println(phRaw);
+    Serial.print(";luminosity=");
+    Serial.print(luminosity, 1);
 
-  Serial.print("Soil Moisture RAW: ");
-  Serial.println(soilRaw);
+    Serial.print(";temperature=");
+    Serial.print(temperature, 1);
 
-  Serial.print("Nutrients RAW: ");
-  Serial.println(nutrientsRaw);
+    Serial.print(";air_humidity=");
+    Serial.println(airHumidity, 1);
 
-  Serial.print("Luminosity RAW: ");
-  Serial.println(ldrRaw);
-
-  Serial.print("Temperature: ");
-  Serial.println(temperature);
-
-  Serial.print("Air Humidity: ");
-  Serial.println(humidity);
-
-  Serial.println();
-
-  delay(3000);
+    delay(3000);
 }
