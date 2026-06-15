@@ -16,3 +16,6 @@ def show_current_sensor_data():
     print(f"Luminosidade: {sensor_data.get('luminosity', 0):.1f}%")
     print(f"Temperatura: {sensor_data.get('temperature', 0):.1f} °C")
     print(f"Umidade do ar: {sensor_data.get('air_humidity', 0):.1f}%")
+    print("--------------------------------------")
+    print(f"Índice de produtividade esperada: {sensor_data.get('productivity_index', 0):.1f}/100")
+    print(f"Classificação de produtividade: {sensor_data.get('productivity_classification', '-')}")
