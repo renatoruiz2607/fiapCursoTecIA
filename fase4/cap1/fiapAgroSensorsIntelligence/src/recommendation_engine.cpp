@@ -65,3 +65,39 @@ bool RecommendationEngine::isNutrientsLevelAdequate(float nutrientsLevel) {
 bool RecommendationEngine::hasHighEvaporationRisk(float temperature, float airHumidity) {
     return temperature >= 35.0 && airHumidity <= 35.0;
 }
+
+float RecommendationEngine::calculateIrrigationVolume(
+    float soilMoisture,
+    float ph,
+    float nutrientsLevel
+) {
+    if (!isPhAdequate(ph) || !isNutrientsLevelAdequate(nutrientsLevel)) {
+        return 0.0;
+    }
+
+    if (soilMoisture < 25.0) {
+        return 8.0;
+    }
+
+    if (soilMoisture >= 25.0 && soilMoisture < 40.0) {
+        return 5.0;
+    }
+
+    if (soilMoisture >= 40.0 && soilMoisture < 55.0) {
+        return 2.0;
+    }
+
+    return 0.0;
+}
+
+String RecommendationEngine::classifyFertilizationNeed(float nutrientsLevel) {
+    if (nutrientsLevel >= 80.0) {
+        return "Baixa";
+    }
+
+    if (nutrientsLevel >= 50.0) {
+        return "Média";
+    }
+
+    return "Alta";
+}

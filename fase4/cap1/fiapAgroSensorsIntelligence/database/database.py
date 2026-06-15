@@ -41,7 +41,9 @@ def initialize_database():
                 productivity_index NUMBER(5,2) NOT NULL,
                 productivity_classification VARCHAR2(20) NOT NULL,
 
-                recommendation VARCHAR2(500) NOT NULL
+                recommendation VARCHAR2(500) NOT NULL,
+                irrigation_volume NUMBER(5,2) NOT NULL,
+                fertilization_need VARCHAR2(20) NOT NULL
             )
         """)
 
