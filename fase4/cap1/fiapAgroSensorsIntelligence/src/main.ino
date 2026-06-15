@@ -1,8 +1,10 @@
 #include "sensor_readings.h"
 #include "productivity_engine.h"
+#include "recommendation_engine.h"
 
 SensorReadings sensors;
 ProductivityEngine productivityEngine;
+RecommendationEngine recommendationEngine;
 
 void setup() {
     Serial.begin(115200);
@@ -27,6 +29,15 @@ void loop() {
     String productivityClassification =
         productivityEngine.classifyProductivity(productivityIndex);
 
+    String recommendation = recommendationEngine.generateRecommendation(
+        soilMoisture,
+        ph,
+        nutrientsLevel,
+        temperature,
+        airHumidity,
+        productivityIndex
+    );
+
     Serial.print("soil_moisture=");
     Serial.print(soilMoisture, 1);
 
@@ -49,7 +60,10 @@ void loop() {
     Serial.print(productivityIndex, 1);
 
     Serial.print(";productivity_classification=");
-    Serial.println(productivityClassification);
+    Serial.print(productivityClassification);
+
+    Serial.print(";recommendation=");
+    Serial.println(recommendation);
 
     delay(3000);
 }
