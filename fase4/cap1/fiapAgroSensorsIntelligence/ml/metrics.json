@@ -1,0 +1,102 @@
+{
+    "soil_moisture": {
+        "target": "soil_moisture",
+        "label": "Umidade do solo",
+        "model_file": "ml/trained_models/soil_moisture_model.pkl",
+        "features": [
+            "ph",
+            "nutrients_level",
+            "luminosity",
+            "temperature",
+            "air_humidity",
+            "productivity_index",
+            "irrigation_volume"
+        ],
+        "metrics": {
+            "mae": 7.8754,
+            "mse": 110.0623,
+            "rmse": 10.4911,
+            "r2": 0.6031
+        }
+    },
+    "ph": {
+        "target": "ph",
+        "label": "pH do solo",
+        "model_file": "ml/trained_models/ph_model.pkl",
+        "features": [
+            "soil_moisture",
+            "nutrients_level",
+            "luminosity",
+            "temperature",
+            "air_humidity",
+            "productivity_index",
+            "irrigation_volume"
+        ],
+        "metrics": {
+            "mae": 0.625,
+            "mse": 0.6143,
+            "rmse": 0.7838,
+            "r2": -0.042
+        }
+    },
+    "nutrients_level": {
+        "target": "nutrients_level",
+        "label": "Nível de nutrientes",
+        "model_file": "ml/trained_models/nutrients_model.pkl",
+        "features": [
+            "soil_moisture",
+            "ph",
+            "luminosity",
+            "temperature",
+            "air_humidity",
+            "productivity_index",
+            "irrigation_volume"
+        ],
+        "metrics": {
+            "mae": 10.8872,
+            "mse": 194.793,
+            "rmse": 13.9568,
+            "r2": 0.4453
+        }
+    },
+    "productivity_index": {
+        "target": "productivity_index",
+        "label": "Produtividade esperada",
+        "model_file": "ml/trained_models/productivity_model.pkl",
+        "features": [
+            "soil_moisture",
+            "ph",
+            "nutrients_level",
+            "luminosity",
+            "temperature",
+            "air_humidity",
+            "irrigation_volume"
+        ],
+        "metrics": {
+            "mae": 3.3927,
+            "mse": 18.1038,
+            "rmse": 4.2549,
+            "r2": 0.8507
+        }
+    },
+    "irrigation_volume": {
+        "target": "irrigation_volume",
+        "label": "Volume de irrigação",
+        "model_file": "ml/trained_models/irrigation_model.pkl",
+        "features": [
+            "soil_moisture",
+            "ph",
+            "nutrients_level",
+            "luminosity",
+            "temperature",
+            "air_humidity",
+            "productivity_index"
+        ],
+        "metrics": {
+            "mae": 0.0837,
+            "mse": 0.0961,
+            "rmse": 0.31,
+            "r2": 0.9626
+        }
+    }
+}

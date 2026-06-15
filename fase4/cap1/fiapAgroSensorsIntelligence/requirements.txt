@@ -1,3 +1,7 @@
 pyserial>=3.5
 python-dotenv>=1.0.0
 oracledb
+pandas>=2.0.0
+scikit-learn>=1.4.0
+joblib
+numpy>=1.26.0
