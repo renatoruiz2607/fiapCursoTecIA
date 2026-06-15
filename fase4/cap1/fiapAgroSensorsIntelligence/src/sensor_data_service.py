@@ -1,4 +1,5 @@
 from serial_sensor_reader import read_current_sensor_data
+from database.sensor_reading_repository import save_sensor_reading
 
 
 def show_current_sensor_data():
@@ -41,3 +42,14 @@ def show_agricultural_recommendation():
     print("\nRecomendação agrícola:")
     print("--------------------------------------")
     print(sensor_data.get("recommendation", "-"))
+
+
+def save_current_sensor_data():
+    sensor_data = read_current_sensor_data()
+
+    if not sensor_data:
+        print("\nNenhuma leitura válida foi encontrada para salvar.")
+        return
+
+    save_sensor_reading(sensor_data)
+    print("\nLeitura atual salva no banco de dados com sucesso.")
