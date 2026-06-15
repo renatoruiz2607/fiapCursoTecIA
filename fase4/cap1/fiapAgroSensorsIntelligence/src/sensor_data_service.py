@@ -42,6 +42,8 @@ def show_agricultural_recommendation():
     print("\nRecomendação agrícola:")
     print("--------------------------------------")
     print(sensor_data.get("recommendation", "-"))
+    print(f"Volume recomendado de irrigação: {sensor_data.get('irrigation_volume', 0):.1f} L")
+    print(f"Necessidade de fertilização: {sensor_data.get('fertilization_need', '-')}")
 
 
 def save_current_sensor_data():

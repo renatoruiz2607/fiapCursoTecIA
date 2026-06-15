@@ -16,7 +16,9 @@ def save_sensor_reading(sensor_data):
             air_humidity,
             productivity_index,
             productivity_classification,
-            recommendation
+            recommendation,
+            irrigation_volume,
+            fertilization_need
         )
         VALUES (
             :soil_moisture,
@@ -27,7 +29,9 @@ def save_sensor_reading(sensor_data):
             :air_humidity,
             :productivity_index,
             :productivity_classification,
-            :recommendation
+            :recommendation,
+            :irrigation_volume,
+            :fertilization_need
         )
         """,
         {
@@ -40,6 +44,8 @@ def save_sensor_reading(sensor_data):
             "productivity_index": sensor_data.get("productivity_index"),
             "productivity_classification": sensor_data.get("productivity_classification"),
             "recommendation": sensor_data.get("recommendation"),
+            "irrigation_volume": sensor_data.get("irrigation_volume"),
+            "fertilization_need": sensor_data.get("fertilization_need"),
         },
     )
 

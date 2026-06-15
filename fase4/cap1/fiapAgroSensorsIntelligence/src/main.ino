@@ -38,6 +38,15 @@ void loop() {
         productivityIndex
     );
 
+    float irrigationVolume = recommendationEngine.calculateIrrigationVolume(
+        soilMoisture,
+        ph,
+        nutrientsLevel
+    );
+
+    String fertilizationNeed =
+        recommendationEngine.classifyFertilizationNeed(nutrientsLevel);
+
     Serial.print("soil_moisture=");
     Serial.print(soilMoisture, 1);
 
@@ -63,7 +72,13 @@ void loop() {
     Serial.print(productivityClassification);
 
     Serial.print(";recommendation=");
-    Serial.println(recommendation);
+    Serial.print(recommendation);
+
+    Serial.print(";irrigation_volume=");
+    Serial.print(irrigationVolume, 1);
+
+    Serial.print(";fertilization_need=");
+    Serial.println(fertilizationNeed);
 
     delay(3000);
 }

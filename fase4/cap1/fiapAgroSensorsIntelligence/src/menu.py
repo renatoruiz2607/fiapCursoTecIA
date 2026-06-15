@@ -11,6 +11,8 @@ from services.ingestion_service import (
     show_ingestion_status,
 )
 
+from services.csv_import_service import import_simulated_csv_to_database
+
 
 def show_header():
     print("\n======================================")
@@ -27,6 +29,7 @@ def show_menu():
     print("5 - Iniciar ingestão automática")
     print("6 - Exibir status da ingestão")
     print("7 - Parar ingestão automática")
+    print("8 - Importar CSV simulado para o banco de dados")
     print("0 - Sair")
 
 
@@ -57,6 +60,9 @@ def start_menu():
 
         elif option == "7":
             stop_automatic_ingestion()
+
+        elif option == "8":
+            import_simulated_csv_to_database()
 
         elif option == "0":
             stop_automatic_ingestion()
