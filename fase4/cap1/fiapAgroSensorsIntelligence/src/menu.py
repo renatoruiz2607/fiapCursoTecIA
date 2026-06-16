@@ -17,6 +17,8 @@ from ml.train_models import train_all_models
 
 from ml.prediction_service import execute_agricultural_prediction
 
+from services.dashboard_launcher import open_dashboard
+
 
 def show_header():
     print("\n======================================")
@@ -36,6 +38,7 @@ def show_menu():
     print("8 - Importar CSV simulado para o banco de dados")
     print("9 - Treinar modelos de Machine Learning")
     print("10 - Executar previsão agrícola")
+    print("11 - Abrir dashboard Streamlit")
     print("0 - Sair")
 
 
@@ -75,6 +78,9 @@ def start_menu():
 
         elif option == "10":
             execute_agricultural_prediction()
+
+        elif option == "11":
+            open_dashboard()
 
         elif option == "0":
             print("\nEncerrando o sistema...")
