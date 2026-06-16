@@ -106,7 +106,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 ## 📎 Links e Observações
 
 - <b>Listagem de Links</b>: Links do projeto (ex. vídeos da entrega, páginas, etc.),
-   - Vídeo demonstrativo: [Assistir no YouTube](https://youtu.be/lNG4tYj-Chc)
+   - Vídeo demonstrativo: [Assistir no YouTube](https://youtu.be/WE4Vs--0QCY)
 
 - <b>Explicação de decisões técnicas</b>:
    - Para o MVP, as previsões e recomendações agrícolas utilizam exclusivamente os dados coletados pelos sensores locais, sem integração com APIs meteorológicas. Essa decisão permitiu concentrar o desenvolvimento na coleta, armazenamento, treinamento dos modelos de Machine Learning e geração de previsões dentro do escopo da atividade.
