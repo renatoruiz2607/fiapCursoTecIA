@@ -120,7 +120,7 @@ col1, col2, col3, col4, col5 = st.columns(5)
 col1.metric("Registros", len(df))
 col2.metric("Umidade média", f"{df['soil_moisture'].mean():.1f}%")
 col3.metric("pH médio", f"{df['ph'].mean():.1f}")
-col4.metric("Nutrientes médios", f"{df['nutrients_level'].mean():.1f}%")
+col4.metric("Nível médio de nutrientes", f"{df['nutrients_level'].mean():.1f}%")
 col5.metric("Produtividade média", f"{df['productivity_index'].mean():.1f}/100")
 
 st.markdown(
