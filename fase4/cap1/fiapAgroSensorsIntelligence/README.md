@@ -361,6 +361,14 @@ ORACLE_PASSWORD=sua_senha
 ORACLE_DSN=oracle_dsn
 ```
 
+<p align="center">
+  <img src="assets/oracleDB.png" width="600"/>
+</p>
+
+<p align="center">
+  <i>Figura 2 — Banco de Dados Oracle</i>
+</p>
+
 ## 📊 Dashboard Analítico
 
 *O dashboard analítico foi desenvolvido para consolidar as informações armazenadas no banco de dados e apresentar indicadores, análises e previsões agrícolas de forma visual e intuitiva.*
@@ -371,42 +379,126 @@ ORACLE_DSN=oracle_dsn
 
 *O dataset simulado utilizado durante o desenvolvimento do projeto (*`simulated_sensor_readings.csv`*) também está disponível no repositório. Dessa forma, avaliadores e demais usuários podem importar a mesma base histórica utilizada pelos autores, reproduzindo o treinamento dos modelos, as métricas obtidas, as previsões geradas e todas as análises apresentadas no dashboard.*
 
-### Tela Inicial do Dashboard
+### Métricas gerais da Base de Dados
 
 <p align="center">
-  <img src="assets/dashboard/launchPage.png" width="800"/>
+  <img src="assets/dashGeneralMetrics.png" width="800"/>
 </p>
-<p align="center"><i>Figura 2 — Tela inicial do dashboard com campo para informar o UUID do usuário</i></p>
+<p align="center"><i>Figura 3 — Métricas gerais da Base de Dados</i></p>
 
-### Métricas e Análises Visuais
+*A base histórica utilizada no projeto é composta por 1.000 registros agrícolas, contendo leituras dos sensores e indicadores calculados pelo sistema.*
 
-<p align="center">
-  <img src="assets/dashboard/dataPage1.png" width="800"/>
-</p>
+*O dashboard exibe a média de dados críticos do solo.*
 
-<p align="center">
-  <i>Figura 3 — Cards de métricas e gráficos de evolução do score e distribuição por status</i>
-</p>
+*O índice médio de produtividade esperada foi de 71,5/100, indicando que, de forma geral, os cenários presentes na base apresentam condições agrícolas favoráveis e potencial produtivo moderado a elevado.*
 
-### Ranking, Poluentes e Registros
+### Última leitura registrada
 
 <p align="center">
-  <img src="assets/dashboard/dataPage2.png" width="800"/>
+  <img src="assets/dashLastReadings.png" width="800"/>
 </p>
 
 <p align="center">
-  <i>Figura 4 — Cards de métricas e gráficos de evolução do score e distribuição por status</i>
+  <i>Figura 4 — Última leitura registrada</i>
 </p>
 
-### Predições com Machine Learning
+*Em conjunto, a última leitura representa um cenário relativamente estável, porém com atenção para o pH levemente abaixo da faixa ideal e para a baixa luminosidade observada no momento da medição.*
 
-<p align="center">
-  <img src="assets/dashboard/dataPage3.png" width="800"/>
-</p>
+### Métricas dos Modelos de Regressão
 
 <p align="center">
-  <i>Figura 5 — Seção com predições por região com Machine Learning</i>
+  <img src="assets/dashRegressionModels.png" width="800"/>
 </p>
+
+<p align="center">
+  <i>Figura 5 — Métricas dos Modelos de Regressão</i>
+</p>
+
+*Os modelos de regressão foram avaliados utilizando as métricas MAE, MSE, RMSE e R², permitindo medir o nível de precisão das previsões geradas para cada variável agrícola.*
+
+****Volume de Irrigação***: O modelo de volume de irrigação apresentou o melhor desempenho entre todos os modelos treinados, alcançando R² de 0,9626. Esse resultado indica que o algoritmo conseguiu explicar aproximadamente 96% da variação observada nos dados, demonstrando elevada capacidade preditiva para estimar a necessidade de irrigação.*
+
+****Produtividade Esperada***: O modelo de produtividade esperada também apresentou excelente desempenho, com R² de 0,8507. Como o índice de produtividade é calculado a partir de variáveis diretamente monitoradas pelo sistema, o modelo conseguiu identificar com precisão os padrões que influenciam o potencial produtivo da lavoura.*
+
+****Umidade do Solo***: O modelo de previsão da umidade do solo obteve R² de 0,6031, indicando capacidade preditiva satisfatória. O resultado demonstra que existe relação consistente entre a umidade do solo e as demais variáveis monitoradas, permitindo estimativas razoáveis para apoio à tomada de decisão.*
+
+****Nível de Nutrientes***: O modelo de nutrientes apresentou R² de 0,4453, considerado moderado. Esse comportamento era esperado, pois a disponibilidade de nutrientes possui menor correlação direta com parte das demais variáveis presentes na base de treinamento, tornando sua previsão mais desafiadora.*
+
+****pH do Solo***: O modelo de pH apresentou R² de -0,042, indicando baixo poder preditivo. Esse resultado ocorre porque o pH foi gerado de forma praticamente independente das demais variáveis da base simulada, reduzindo a capacidade do algoritmo de identificar padrões consistentes para previsão.*
+
+*Os resultados demonstram que os modelos obtiveram melhor desempenho para variáveis diretamente relacionadas às regras agronômicas implementadas no projeto, como produtividade esperada e volume de irrigação. Por outro lado, variáveis com menor dependência das demais características da base, como o pH, apresentaram desempenho inferior.*
+
+*Esse comportamento reforça um dos principais conceitos de Machine Learning: a qualidade das previsões depende diretamente da qualidade dos dados disponíveis e do grau de relação existente entre as variáveis utilizadas durante o treinamento.*
+
+### Gráficos de correlação
+
+<p align="center">
+  <img src="assets/dashCorelationGraphs.png" width="800"/>
+</p>
+
+<p align="center">
+  <i>Figura 6 — Gráficos de correlação</i>
+</p>
+
+***Correlação com a Produtividade Esperada***
+
+*O gráfico destaca as variáveis que mais influenciam o índice de produtividade esperado calculado pelo sistema.*
+
+****Nível de nutrientes (0,44)***: apresentou a maior correlação positiva com a produtividade, indicando que solos mais ricos em nutrientes tendem a gerar melhores índices produtivos.*
+
+****Luminosidade (0,32)***: apresentou correlação positiva moderada, demonstrando a importância da incidência de luz para o desenvolvimento das culturas.*
+
+****Temperatura (0,23)***: apresentou influência positiva mais discreta, contribuindo para o desempenho produtivo quando em faixas adequadas.*
+
+****Umidade do ar (-0,25)***: apresentou correlação negativa moderada, sugerindo que níveis elevados de umidade atmosférica nem sempre estão associados aos melhores cenários produtivos presentes na base.*
+
+****pH (-0,05) e umidade do solo (-0,04)***: apresentaram correlação muito baixa com a produtividade, indicando pouca influência direta dentro dos cenários simulados utilizados no projeto.*
+
+***Relações Relevantes Identificadas***
+
+*A matriz de correlação também permite observar alguns comportamentos coerentes com cenários agrícolas reais.*
+
+*Luminosidade e temperatura apresentaram forte correlação positiva (0,81), indicando que períodos mais iluminados tendem a estar associados a temperaturas mais elevadas.*
+
+*Luminosidade e umidade do ar apresentaram forte correlação negativa (-0,84), refletindo a tendência de redução da umidade relativa em períodos mais ensolarados.*
+
+*Temperatura e umidade do ar também apresentaram correlação negativa significativa (-0,79), comportamento frequentemente observado em condições climáticas reais.*
+
+*Umidade do solo e umidade do ar apresentaram correlação positiva (0,61), indicando que ambientes mais úmidos tendem a favorecer a manutenção da umidade no solo.*
+
+*Os resultados demonstram que o nível de nutrientes foi o fator mais relevante para o índice de produtividade presente na base de dados, seguido pela luminosidade e temperatura. As correlações observadas reforçam a consistência dos cenários utilizados no projeto e ajudam a explicar o desempenho obtido pelos modelos de Machine Learning durante o treinamento.*
+
+### Resultados de previsão
+
+<p align="center">
+  <img src="assets/dashPredictedResults.png" width="800"/>
+</p>
+
+<p align="center">
+  <i>Figura 7 — Resultados de previsão</i>
+</p>
+
+*Esta seção apresenta as estimativas geradas pelos modelos de Machine Learning a partir da leitura mais recente registrada no banco de dados. O objetivo é demonstrar como os padrões aprendidos durante o treinamento podem ser utilizados para apoiar decisões futuras relacionadas à irrigação e ao manejo agrícola.*
+
+****Manejo Agrícola***: Com base no nível de nutrientes estimado, o sistema classificou a necessidade de fertilização como Média. Isso indica que o solo apresenta condições aceitáveis para o cultivo, mas deve continuar sendo monitorado para evitar redução da disponibilidade nutricional ao longo do tempo.*
+
+****Recomendação Futura***: Considerando conjuntamente as previsões de umidade, pH, nutrientes, produtividade e irrigação, o sistema concluiu que as condições futuras tendem a permanecer adequadas, não identificando a necessidade de ações corretivas imediatas.*
+
+*Os resultados demonstram a aplicação prática dos modelos preditivos desenvolvidos no projeto. Em vez de apenas analisar o estado atual da lavoura, o sistema é capaz de estimar tendências futuras e fornecer suporte antecipado à tomada de decisão agrícola, objetivo central da proposta de Agricultura Cognitiva apresentada neste trabalho.*
+
+### Tendência de produtividade
+
+<p align="center">
+  <img src="assets/dashProductivityTendency.png" width="800"/>
+</p>
+
+<p align="center">
+  <i>Figura 8 — Tendência de produtividade</i>
+</p>
+
+*O gráfico apresenta a variação do índice de produtividade esperado ao longo dos registros armazenados no banco de dados.*
+
+*A maior parte dos registros concentra-se entre 60 e 85 pontos, próxima da média geral de 71,5/100, indicando predominância de condições agrícolas favoráveis.*
 
 
 ## 🗃 Histórico de lançamentos
