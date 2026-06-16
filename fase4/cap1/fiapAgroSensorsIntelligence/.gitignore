@@ -1,4 +1,3 @@
-*.csv
 *.tsv
 *.xls
 *.xlsx
@@ -10,3 +9,6 @@
 __pycache__/
 *.pyc
 .env
+*.db
+ml/trained_models/
+ml/metrics.json

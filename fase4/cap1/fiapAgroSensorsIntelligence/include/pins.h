@@ -1,5 +1,4 @@
-#ifndef PINS_H
-#define PINS_H
+#pragma once
 
 // Potenciômetros
 
@@ -11,5 +10,3 @@
 
 #define LDR_PIN 32
 #define DHT_PIN 22
-
-#endif
