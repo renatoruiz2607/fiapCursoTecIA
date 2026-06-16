@@ -123,41 +123,41 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ## 🔧 Como executar o código
 
-*Pré Requisitos:*
+***Pré Requisitos:***
 
 *Git - Utilizado para clonar o repositório do projeto.*
 
 *Visual Studio Code (VS Code)*
 
-*Extensões: PlatformIO, Wokwi Simulator, pyserial e python-dotenv* 
+*Extensões: PlatformIO, Wokwi Simulator, pyserial, python-dotenv, oracledb, pandas, scikit-learn, joblib, numpy e streamlit*
 
 *Se necessário instalar os certificados SSL do Python*
 
 *Garantir que tenha as instalações necessárias das linguagens C/C++ e Python*
 
-*Criar credenciais OAuth2 no Sentinel Hub*
+*Criar um projeto no Oracle*
 
-*Criar um projeto no Supabase e configurar as tabelas <code>atmosphere_raw_payloads</code> e <code>atmosphere_records</code>*
-
-*Configurar as variáveis de ambiente do Supabase no arquivo .env*
+*Configurar as variáveis de ambiente do Oracle no arquivo .env*
 
 *Instalar as dependências Python com `pip install -r requirements.txt`*
 
-*Fase 1 — Clonar o repositório:*
+***Fase 1 — Clonar o repositório:***
 
-*No terminal, execute: git clone `git@github.com:renatoruiz2607/fiapGroupRepository.git`*
+*No terminal, execute: git clone `git@github.com:renatoruiz2607/fiapCursoTecIA.git`*
 
 *Em seguida, faça o trajeto até a pasta principal:*
 
-*cd fiapGroupRepository*
+*cd fiapCursoTecIA*
 
-*cd 1TIAO*
+*cd fase4*
 
-*cd Global-Solution-1*
+*cd cap1*
+
+*cd fiapAgroSensorsIntelligence*
 
 *Crie e configure o arquivo .env com as informações de .env.example*
 
-*Fase 2 — Executar a aplicação*
+***Fase 2 — Executar a aplicação***
 
 *Abra a extensão PlatformIO*
 
@@ -169,24 +169,24 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 *No terminal python, execute `python3 src/main.py`*
 
-*Fase 3 - Funcionamento*
+***Fase 3 - Funcionamento***
 
 *O sistema permite, pelo menu interativo:*
 
-- *cadastrar um nome e receber um UUID*
-- *cadastrar uma região com latitude e longitude*
-- *Conferir os valores detectados nos sensores*
+- *exibir leitura atual dos sensores*
+- *exibir produtividade esperada*
+- *exibir recomendação agrícola*
+- *salvar leitura atual no banco de dados*
+- *iniciar ingestão automática dos dados no banco de dados*
+- *exibir status da ingestão automática*
+- *parar ingestão automática*
+- *importar CSV simulado para o banco de dados*
+- *treinar modelos de Machine Learning*
+- *executar previsão agrícola*
+- *abrir dashboard Streamlit*
+- *encerrar a aplicação*
 
 *O sistema também permite simular diferentes cenários em tempo real via alteração dos níveis dos sensores, a partir dos componentes no simulador Wokwi (diagram.json)*
-
-- *Conferir valores importantes para a análise da qualidade do ar nas APIs Nasa Power e Sentinel-5P*
-- *Receber a análise lógica do sistema para aquela região*
-- *Enviar os dados daquela região e de outras que vão se acumulando no histórico ao banco de dados Supabase*
-- *Abertura do Dashboard no navegador*
-
-*O usuário informa seu UUID no dashboard para consultar diretamente os dados armazenados no Supabase, visualizando métricas, gráficos, rankings e informações analíticas sobre as regiões monitoradas.*
-
-*O usuário pode também inserir um CSV no dashboard para realizar consultas.*
 
 ## 🧠 Lógica de Análise Atmosférica
 
