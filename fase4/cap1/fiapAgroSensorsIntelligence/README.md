@@ -333,50 +333,43 @@ Foram implementados modelos supervisionados de regressão para previsão das seg
 
 *Os resultados representam um cenário agrícola estimado com base nos padrões aprendidos pelo modelo durante o treinamento, servindo como apoio à tomada de decisão relacionada à irrigação e ao manejo agrícola.*
 
-## 🗄️ Integração com Supabase e Dashboard
+## 🗄️ Integração com Banco de Dados Oracle
 
-*A integração com Supabase foi implementada para permitir que os registros ambientais gerados pela aplicação sejam persistidos em banco de dados e posteriormente consumidos pelo dashboard analítico.*
+*A integração com o banco de dados Oracle foi implementada para permitir o armazenamento persistente das leituras agrícolas coletadas pela aplicação, criando uma base histórica utilizada nas análises e previsões do sistema.*
 
-*O envio dos dados ocorre a partir do histórico local gerado pela aplicação. Cada análise concluída contém informações da região monitorada, dados climáticos da NASA POWER, dados atmosféricos do Sentinel-5P, leituras dos sensores locais e resultado da análise baseada em regras.*
+*Cada registro armazenado contém informações como umidade do solo, pH, nível de nutrientes, luminosidade, temperatura, umidade do ar, índice de produtividade esperada, volume de irrigação recomendado, necessidade de fertilização e recomendações geradas pelo sistema.*
 
-*Para garantir rastreabilidade e flexibilidade, os dados são armazenados em duas tabelas:*
+*Ao iniciar a aplicação, o sistema verifica automaticamente a existência da tabela principal utilizada pelo projeto. Caso a estrutura ainda não exista, a tabela é criada automaticamente, simplificando a configuração inicial do ambiente.*
 
-- *<code>atmosphere_raw_payloads</code>: armazena o JSON completo da análise em formato JSONB, preservando todos os campos originais gerados pela aplicação.*
-- *<code>atmosphere_records</code>: armazena os principais campos da análise em colunas estruturadas, facilitando consultas, filtros, gráficos e análises no dashboard.*
+*A tabela utilizada é:*
 
-*Cada usuário possui um identificador único em formato UUID. Esse identificador é gerado pela aplicação e associado aos registros enviados ao Supabase, permitindo que o dashboard filtre os dados correspondentes ao usuário informado.*
+- *sensor_readings: responsável pelo armazenamento das leituras agrícolas e indicadores calculados pela aplicação.*
 
-*O dashboard foi desenvolvido em Streamlit e conectado diretamente ao Supabase. A visualização apresenta indicadores como total de registros, score médio, menor score, quantidade de registros em degradação, evolução do score atmosférico, distribuição por status, ranking de regiões e comparação média de poluentes.*
+*Os dados podem ser enviados ao banco de três formas:*
 
-*As variáveis necessárias para conexão com o Supabase são configuradas no arquivo <code>.env</code>:*
+- *salvamento manual da leitura atual dos sensores;*
+- *ingestão automática em intervalos periódicos configurados pela aplicação;*
+- *importação de um dataset simulado em CSV para popular a base histórica utilizada nos treinamentos de Machine Learning.*
+
+*O banco de dados é utilizado como repositório central da solução, concentrando tanto os dados coletados pelos sensores quanto os indicadores derivados das regras de negócio implementadas pelo sistema.*
+
+*As variáveis necessárias para conexão com o banco Oracle são configuradas no arquivo <code>.env</code>:*
 
 ```env
-SUPABASE_URL=sua_url_do_supabase
-SUPABASE_KEY=sua_chave_do_supabase
-SUPABASE_RAW_TABLE=atmosphere_raw_payloads
-SUPABASE_RECORDS_TABLE=atmosphere_records
-
-
-Para executar o dashboard localmente, utilize a função 10 do menu.
+ORACLE_USER=seu_usuario
+ORACLE_PASSWORD=sua_senha
+ORACLE_DSN=oracle_dsn
 ```
 
 ## 📊 Dashboard Analítico
 
-*O dashboard analítico foi desenvolvido em Streamlit e conectado diretamente ao Supabase, permitindo que os dados persistidos no banco sejam consultados por meio do UUID do usuário.*
+*O dashboard analítico foi desenvolvido para consolidar as informações armazenadas no banco de dados e apresentar indicadores, análises e previsões agrícolas de forma visual e intuitiva.*
 
-*Além disso, há também a opção de importar um arquivo CSV para análise dos registros, possibilitando a utilização do dashboard mesmo sem conexão com o banco de dados.*
+*A interface permite acompanhar as principais variáveis monitoradas pela solução, incluindo umidade do solo, pH, nível de nutrientes, luminosidade, temperatura, umidade do ar, produtividade esperada e volume de irrigação recomendado.*
 
-*A interface apresenta métricas gerais, filtros, gráficos e uma tabela com os registros ambientais coletados e analisados pelo sistema.*
+*Além da visualização dos dados históricos, o dashboard também apresenta os resultados gerados pelos modelos de Machine Learning*
 
-*Para complementar as análises, foi implementada uma camada de Machine Learning utilizando os algoritmos Random Forest Regressor e Random Forest Classifier, ambos disponibilizados pela biblioteca Scikit-Learn. O Random Forest Regressor é utilizado para prever o Ozone Recovery Score de cada região, enquanto o Random Forest Classifier é utilizado para prever o status de recuperação atmosférica e a recomendação mais provável para a região analisada.*
-
-*As predições são apresentadas por região, permitindo visualizar o score médio atual, o score previsto pelo modelo e a tendência estimada (melhora, estabilidade ou piora), além do status e recomendação previstos para a região selecionada.*
-
-*Para avaliar a qualidade das previsões, é utilizado o indicador MAE (Mean Absolute Error ou Erro Médio Absoluto), uma métrica que mede a diferença média entre os valores reais e os valores previstos pelo modelo. Quanto menor o valor do MAE, maior a precisão das previsões realizadas pelo algoritmo.*
-
-*Link do dashboard publicado no Render:*
-
-- <a href="https://dashboardgloabalsolutionfiap.onrender.com" target="_blank">Acessar Dashboard Ozone Recovery Intelligence</a>
+*O dataset simulado utilizado durante o desenvolvimento do projeto (*`simulated_sensor_readings.csv`*) também está disponível no repositório. Dessa forma, avaliadores e demais usuários podem importar a mesma base histórica utilizada pelos autores, reproduzindo o treinamento dos modelos, as métricas obtidas, as previsões geradas e todas as análises apresentadas no dashboard.*
 
 ### Tela Inicial do Dashboard
 
