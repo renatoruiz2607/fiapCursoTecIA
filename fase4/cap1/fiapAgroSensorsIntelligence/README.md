@@ -283,15 +283,17 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 ### Pipeline de Treinamento
 
-*Os modelos utilizam um pipeline completo de Machine Learning para garantir que os dados sejam tratados adequadamente antes do treinamento.*
+*Os modelos preditivos foram desenvolvidos utilizando a biblioteca Scikit-Learn. Também foram utilizadas as bibliotecas Pandas para manipulação dos dados, NumPy para operações numéricas e Joblib para persistência dos modelos treinados.*
 
-*O pipeline executa as seguintes etapas:*
+*Para garantir consistência entre treinamento e previsão, foi implementado um pipeline de Machine Learning utilizando os componentes Pipeline e ColumnTransformer da biblioteca Scikit-Learn.*
 
-- *tratamento de valores ausentes utilizando imputação pela média;*
-- *padronização dos dados numéricos;*
-- *treinamento do modelo de regressão.*
+*O pipeline executa automaticamente as seguintes etapas:*
 
-*Essa abordagem garante que todas as etapas de preparação dos dados sejam aplicadas de forma consistente durante o treinamento e durante a execução das previsões.*
+- *tratamento de valores ausentes utilizando SimpleImputer com estratégia de média;*
+- *padronização dos atributos numéricos utilizando StandardScaler;*
+- *treinamento dos modelos de regressão utilizando RandomForestRegressor.*
+
+*Essa abordagem garante que o mesmo processo de preparação dos dados seja aplicado tanto durante o treinamento quanto durante a execução das previsões, reduzindo inconsistências e aumentando a confiabilidade dos resultados gerados pelos modelos.*
 
 ### Modelos Preditivos
 
