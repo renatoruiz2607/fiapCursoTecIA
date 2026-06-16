@@ -70,10 +70,10 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 - <b>src</b>: Contém o código fonte da solução, incluindo a aplicação embarcada no ESP32 e a aplicação Python.
    - <code>main.ino</code>: ponto de entrada da aplicação embarcada no ESP32, responsável pela leitura dos sensores agrícolas simulados.
-   - <code>sensor_readings.cpp/.h</code>: realiza a leitura, conversão e formatação dos dados provenientes dos sensores.
-   - <code>productivity_engine.cpp/.h</code>: calcula o índice de produtividade esperada com base nos indicadores agrícolas coletados.
-   - <code>recommendation_engine.cpp/.h</code>: executa as regras de negócio responsáveis pelas recomendações locais de irrigação e manejo agrícola.
-   - <code>serial_logger.cpp/.h</code>: responsável pela exibição estruturada das leituras no monitor serial.
+   - <code>sensor_readings.cpp</code>: realiza a leitura, conversão e formatação dos dados provenientes dos sensores.
+   - <code>productivity_engine.cpp</code>: calcula o índice de produtividade esperada com base nos indicadores agrícolas coletados.
+   - <code>recommendation_engine.cpp</code>: executa as regras de negócio responsáveis pelas recomendações locais de irrigação e manejo agrícola.
+   - <code>serial_logger.cpp</code>: responsável pela exibição estruturada das leituras no monitor serial.
    - <code>main.py</code>: ponto de entrada da aplicação Python responsável pela inicialização do banco de dados e carregamento do menu principal.
    - <code>menu.py</code>: implementa o menu interativo utilizado para consulta dos sensores, persistência dos dados, treinamento dos modelos, execução das previsões e abertura do dashboard.
 
@@ -109,20 +109,16 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
    - Vídeo demonstrativo: [Assistir no YouTube](https://youtu.be/lNG4tYj-Chc)
 
 - <b>Explicação de decisões técnicas</b>:
-   - O sensor MQ2 foi utilizado para simular a qualidade do ar devido à sua disponibilidade no simulador Wokwi. Em uma aplicação real, o sensor MQ135 seria mais adequado por ser projetado especificamente para monitoramento da qualidade do ar e concentração de gases atmosféricos.
-   - O sensor BMP180 foi utilizado para leitura da pressão atmosférica por estar disponível no ambiente de simulação. Em cenários reais, o BMP280 é recomendado por oferecer maior precisão e estabilidade nas medições.
-   - O índice UV local foi simulado por meio de um potenciômetro, cujo valor analógico foi convertido para uma escala compatível com o índice UV, permitindo a comparação entre os dados locais e regionais durante os testes.
-   - As APIs NASA POWER e Sentinel-5P nem sempre disponibilizam imediatamente os dados mais recentes. Para garantir consistência nas consultas, foram adotadas datas de referência alguns dias anteriores à data atual.
-   - Em situações onde o índice UV retornado pela NASA POWER não está disponível, foi implementado um cálculo estimado apenas para fins acadêmicos, permitindo demonstrar comparações entre os dados regionais e os sensores locais.
-   - Na integração com o Sentinel-5P, alguns poluentes podem retornar valores inválidos (NaN) para determinadas regiões ou períodos. Para fins didáticos, foi implementado um mecanismo de fallback utilizando valores simulados, garantindo a continuidade das análises.
-   - As predições de Machine Learning foram planejadas para execução no dashboard analítico em Streamlit, utilizando dados históricos exportados em CSV. Essa abordagem permite trabalhar com um volume maior de dados, realizar análises estatísticas, treinamento de modelos e geração de previsões de forma mais adequada do que executar esses processos diretamente na aplicação operacional.
-   - Para armazenamento dos dados no banco, foi utilizado o Supabase, permitindo persistir tanto o JSON bruto gerado pela aplicação quanto os mesmos dados organizados em colunas para facilitar consultas, filtros e visualizações no dashboard.
-   - Foram criadas duas tabelas no Supabase: <code>atmosphere_raw_payloads</code>, responsável por preservar o payload completo em formato JSONB, e <code>atmosphere_records</code>, responsável por armazenar os campos principais da análise de forma estruturada.
-   - Cada usuário recebe um identificador único em formato UUID, gerado pela aplicação Python. Esse identificador é associado aos registros enviados ao banco e utilizado no dashboard para filtrar os dados correspondentes ao usuário.
-   - Para fins acadêmicos, os registros são associados a um UUID padrão compartilhado, simplificando os testes de análise do dashboard e a apresentação do projeto.
-   - O dashboard foi desenvolvido em Streamlit e conectado diretamente ao Supabase. A partir do UUID informado, o dashboard consulta os registros do usuário e apresenta métricas, gráficos e tabela analítica.
-
-- <b>Observações Gerais</b>: Queremos concorrer à premiação.
+   - Para simplificar a simulação dos dados agrícolas no ambiente Wokwi, foram utilizados potenciômetros para representar algumas variáveis do campo, como umidade do solo, pH e nível de nutrientes. Essa abordagem permitiu gerar valores controlados e compatíveis com as regras do projeto, mantendo o foco principal da atividade na integração dos dados, construção dos modelos preditivos e desenvolvimento do dashboard analítico.
+   - O índice de produtividade esperada foi desenvolvido como um indicador agronômico composto, calculado a partir da combinação de fatores considerados relevantes para o desenvolvimento da lavoura, como umidade do solo, pH, luminosidade e nível de nutrientes. Esse índice foi utilizado tanto para análises quanto para treinamento dos modelos preditivos.
+   - Para aumentar a quantidade de registros disponíveis para treinamento dos modelos de Machine Learning, foi adotada a importação opcional de um dataset simulado contendo dados agrícolas historicamente consistentes. Essa estratégia permitiu trabalhar com uma base mais robusta, melhorando a qualidade das previsões geradas pelos modelos.
+   - O banco de dados é utilizado como repositório central da solução. Todas as leituras dos sensores são armazenadas juntamente com os indicadores calculados pelo sistema, como produtividade esperada e volume de irrigação recomendado, formando o histórico utilizado pelos modelos preditivos.
+   - As previsões agrícolas são realizadas utilizando a leitura mais recente registrada no banco de dados como cenário atual. Dessa forma, o fluxo adotado pela solução consiste em: coleta dos sensores, cálculo dos indicadores agrícolas, persistência dos dados no banco e execução das previsões a partir do histórico armazenado. Quando a ingestão automática está ativa, as previsões passam a refletir continuamente os dados mais recentes coletados pelo sistema.
+   - Como o projeto possui caráter acadêmico e não utiliza séries temporais reais de longo prazo, as previsões não representam estimativas para uma data específica futura. Os resultados devem ser interpretados como um cenário agrícola estimado pelo modelo com base nos padrões identificados no histórico de dados utilizado durante o treinamento.
+   - O volume de irrigação previsto foi modelado como um problema de regressão, permitindo que o sistema estime quantitativamente a necessidade de irrigação a partir das condições agrícolas observadas. Essa abordagem possibilita gerar recomendações mais precisas do que uma simples decisão binária de irrigar ou não irrigar.
+   - A necessidade de fertilização foi representada por meio de classificações qualitativas (Baixa, Média e Alta), facilitando a interpretação dos resultados pelos usuários e permitindo a geração de recomendações de manejo agrícola mais intuitivas.
+   - Os modelos de Machine Learning foram desenvolvidos utilizando aprendizado supervisionado de regressão para prever variáveis críticas do campo, incluindo umidade do solo, pH, nível de nutrientes, produtividade esperada e volume de irrigação. O desempenho dos modelos é avaliado por meio das métricas MAE, MSE, RMSE e R², permitindo analisar a qualidade das previsões geradas.
+   - O dashboard analítico foi desenvolvido para consolidar os dados históricos, métricas dos modelos, correlações entre variáveis agrícolas, tendências de produtividade e previsões geradas pelo sistema, oferecendo uma visão integrada das informações utilizadas na tomada de decisão agrícola.
 
 
 ## 🔧 Como executar o código
