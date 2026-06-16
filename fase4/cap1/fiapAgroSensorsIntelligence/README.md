@@ -109,12 +109,12 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
    - Vídeo demonstrativo: [Assistir no YouTube](https://youtu.be/lNG4tYj-Chc)
 
 - <b>Explicação de decisões técnicas</b>:
+   - Para o MVP, as previsões e recomendações agrícolas utilizam exclusivamente os dados coletados pelos sensores locais, sem integração com APIs meteorológicas. Essa decisão permitiu concentrar o desenvolvimento na coleta, armazenamento, treinamento dos modelos de Machine Learning e geração de previsões dentro do escopo da atividade.
    - Para simplificar a simulação dos dados agrícolas no ambiente Wokwi, foram utilizados potenciômetros para representar algumas variáveis do campo, como umidade do solo, pH e nível de nutrientes. Essa abordagem permitiu gerar valores controlados e compatíveis com as regras do projeto, mantendo o foco principal da atividade na integração dos dados, construção dos modelos preditivos e desenvolvimento do dashboard analítico.
    - O índice de produtividade esperada foi desenvolvido como um indicador agronômico composto, calculado a partir da combinação de fatores considerados relevantes para o desenvolvimento da lavoura, como umidade do solo, pH, luminosidade e nível de nutrientes. Esse índice foi utilizado tanto para análises quanto para treinamento dos modelos preditivos.
    - Para aumentar a quantidade de registros disponíveis para treinamento dos modelos de Machine Learning, foi adotada a importação opcional de um dataset simulado contendo dados agrícolas historicamente consistentes. Essa estratégia permitiu trabalhar com uma base mais robusta, melhorando a qualidade das previsões geradas pelos modelos.
    - O banco de dados é utilizado como repositório central da solução. Todas as leituras dos sensores são armazenadas juntamente com os indicadores calculados pelo sistema, como produtividade esperada e volume de irrigação recomendado, formando o histórico utilizado pelos modelos preditivos.
    - As previsões agrícolas são realizadas utilizando a leitura mais recente registrada no banco de dados como cenário atual. Dessa forma, o fluxo adotado pela solução consiste em: coleta dos sensores, cálculo dos indicadores agrícolas, persistência dos dados no banco e execução das previsões a partir do histórico armazenado. Quando a ingestão automática está ativa, as previsões passam a refletir continuamente os dados mais recentes coletados pelo sistema.
-   - Como o projeto possui caráter acadêmico e não utiliza séries temporais reais de longo prazo, as previsões não representam estimativas para uma data específica futura. Os resultados devem ser interpretados como um cenário agrícola estimado pelo modelo com base nos padrões identificados no histórico de dados utilizado durante o treinamento.
    - O volume de irrigação previsto foi modelado como um problema de regressão, permitindo que o sistema estime quantitativamente a necessidade de irrigação a partir das condições agrícolas observadas. Essa abordagem possibilita gerar recomendações mais precisas do que uma simples decisão binária de irrigar ou não irrigar.
    - A necessidade de fertilização foi representada por meio de classificações qualitativas (Baixa, Média e Alta), facilitando a interpretação dos resultados pelos usuários e permitindo a geração de recomendações de manejo agrícola mais intuitivas.
    - Os modelos de Machine Learning foram desenvolvidos utilizando aprendizado supervisionado de regressão para prever variáveis críticas do campo, incluindo umidade do solo, pH, nível de nutrientes, produtividade esperada e volume de irrigação. O desempenho dos modelos é avaliado por meio das métricas MAE, MSE, RMSE e R², permitindo analisar a qualidade das previsões geradas.
@@ -188,107 +188,150 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 
 *O sistema também permite simular diferentes cenários em tempo real via alteração dos níveis dos sensores, a partir dos componentes no simulador Wokwi (diagram.json)*
 
-## 🧠 Lógica de Análise Atmosférica
+## 🧠 Lógica de Análise Agrícola
 
-*A análise baseada em regras é responsável por interpretar os dados coletados pelos sensores locais, NASA POWER e Sentinel-5P, gerando o score de recuperação atmosférica, o status da região, a comparação entre cenário local e regional e uma recomendação final.*
+*A análise agrícola é responsável por interpretar os dados coletados pelos sensores, calcular indicadores agronômicos, gerar recomendações de manejo e alimentar os modelos de Machine Learning utilizados nas previsões do sistema.*
 
-### Cálculo do Ozone Recovery Score
+### Cálculo do Índice de Produtividade Esperada
 
-*O ozone_recovery_score é calculado com base em dois fatores principais:*
+*O índice de produtividade esperada representa uma estimativa simplificada do potencial produtivo da lavoura, calculada a partir de quatro fatores principais:*
 
-- *impacto da poluição atmosférica;*
-- *bônus de recuperação ambiental.*
+- *umidade do solo;*
+- *pH do solo;*
+- *luminosidade;*
+- *nível de nutrientes.*
 
-*A lógica considera que altas concentrações de poluentes reduzem o score, enquanto condições favoráveis de dispersão e limpeza atmosférica aumentam o score.*
+*Cada variável recebe um score agronômico entre 0 e 100, representando o quanto sua condição atual favorece o desenvolvimento da cultura.*
 
 *Fórmula aplicada:*
 
-*score = 75 - (pollution_score * 55) + (recovery_bonus * 20)*
+*`productivity_index = (soil_moisture_score + ph_score + luminosity_score + nutrients_score) / 4`*
 
 *O resultado final é limitado entre 0 e 100.*
 
-### Pollution Score
+### Scores Agronômicos
 
-*O pollution_score considera os principais indicadores de degradação atmosférica:*
+*Os scores agronômicos são calculados com base em faixas consideradas adequadas para o desenvolvimento da lavoura.*
 
-- *NO₂;*
-- *CO;*
-- *SO₂;*
-- *qualidade do ar local.*
+***Umidade do Solo:***
 
-*Cada variável é normalizada para uma escala de 0 a 1 e recebe um peso na composição do impacto ambiental.*
+- *81% a 90% → Score 70;*
+- *60% a 80% → Score 100;*
+- *45% a 59% → Score 75;*
+- *30% a 44% → Score 45;*
+- *Abaixo de 30% → Score 20;*
+- *Acima de 90% → Score 30.*
 
-*pollution_score = (NO₂ * 0.30) + (CO * 0.25) + (SO₂ * 0.25) + (local_air_quality * 0.20)*
+***pH do Solo:***
 
-*Quanto maior o pollution_score, maior o impacto negativo sobre o potencial de recuperação atmosférica.*
+- *5.5 a 7.0 → Score 100;*
+- *5.0 a 5.4 ou 7.1 a 7.5 → Score 70;*
+- *4.5 a 4.9 ou 7.6 a 8.0 → Score 40;*
+- *Demais valores → Score 20.*
 
-### Recovery Bonus
+***Luminosidade:***
 
-*O recovery_bonus considera variáveis que favorecem a dispersão ou redução de poluentes:*
+- *Acima de 95% → Score 55;*
+- *86% a 95% → Score 70;*
+- *50% a 85% → Score 100;*
+- *35% a 49% → Score 75;*
+- *20% a 34% → Score 45;*
+- *Abaixo de 20% → Score 20.*
 
-- *velocidade do vento;*
-- *precipitação;*
-- *umidade relativa do ar.*
+***Nível de Nutrientes***
 
-*recovery_bonus = (wind_speed * 0.40) + (rainfall * 0.35) + (humidity * 0.25)*
+*O nível de nutrientes já é utilizado diretamente como score, variando de 0 a 100.*
 
-*Quanto maior o recovery_bonus, melhores são as condições ambientais para dispersão ou remoção de poluentes.*
+### Recomendações Agrícolas
 
-### Status de Recuperação
+*A recomendação agrícola utiliza regras de negócio para evitar ações que possam prejudicar ainda mais as condições da lavoura.*
 
-*Após o cálculo do score, a região é classificada em uma das seguintes categorias:*
+***Bloqueio de Irrigação***
 
-- *score >= 80  → Em Recuperação*
-- *score >= 50  → Estável*
-- *score < 50   → Em Degradação*
+- *o pH está fora da faixa adequada (5.5 a 7.0);*
+- *o nível de nutrientes está abaixo de 50%.*
 
-### Comparação Local x Regional
+*Nesses cenários, o sistema recomenda corrigir o solo antes da irrigação.*
 
-*A comparação entre dados locais e regionais é utilizada para identificar se o problema atmosférico está concentrado próximo aos sensores ou se possui comportamento mais amplo na região.*
+***Recomendação de Irrigação***
 
-*A qualidade regional é analisada com base em NO₂, CO e SO₂.*
+- *Umidade abaixo de 25% → Irrigação urgente;*
+- *Umidade entre 25% e 40% → Irrigação recomendada;*
+- *Temperatura elevada e baixa umidade do ar → Irrigação preventiva;*
+- *Demais cenários → Nenhuma ação imediata necessária.*
 
-*Regional ruim: NO₂ > 0.00006 ou CO > 0.05 ou SO₂ > 0.000012*
+***Volume de Irrigação***
 
-*A qualidade local é analisada com base no valor de local_air_quality obtido pelo sensor MQ2.*
+*O volume de irrigação representa uma estimativa simplificada da quantidade de água necessária para o solo.*
 
-- *local_air_quality >= 3000 → ruim*
-- *local_air_quality >= 1800 → atenção*
-- *local_air_quality < 1800  → bom*
+- *Umidade abaixo de 25% → 8 litros;*
+- *Umidade entre 25% e 40% → 5 litros;*
+- *Umidade entre 40% e 55% → 2 litros;*
+- *Acima de 55% → 0 litros.*
 
-*Com base nesses cenários, o sistema classifica a comparação da seguinte forma:*
+*Caso o pH esteja inadequado ou o nível de nutrientes esteja abaixo do mínimo recomendado, o volume de irrigação é automaticamente definido como 0 litros.*
 
-*Regional bom + Local ruim/atenção*
-→ *Anomalia Local Detectada*
+***Necessidade de Fertilização***
 
-*Regional ruim + Local bom*
-→ *Influência Atmosférica Regional*
+*A necessidade de fertilização é determinada com base no nível de nutrientes identificado ou previsto pelo sistema.*
 
-*Regional ruim + Local ruim/atenção*
-→ *Degradação Atmosférica Generalizada*
+- *Nutrientes acima de 80% → Baixa*
+- *Nutrientes entre 50% e 79% → Média*
+- *Nutrientes abaixo de 50% → Alta*
 
-*Regional bom + Local bom*
-→ *Condições Atmosféricas Favoráveis*
+## 🤖 Machine Learning
 
-### Recomendação Automática
+### Pipeline de Treinamento
 
-*A recomendação é gerada de acordo com o resultado da comparação local x regional e com os poluentes mais críticos identificados.*
+*Os modelos utilizam um pipeline completo de Machine Learning para garantir que os dados sejam tratados adequadamente antes do treinamento.*
 
-*Quando há anomalia local, o sistema recomenda investigar fontes próximas de emissão, como tráfego intenso, indústrias, queimadas ou fontes pontuais de poluição.*
+*O pipeline executa as seguintes etapas:*
 
-*Quando há influência atmosférica regional, o sistema indica que poluentes podem ter sido transportados de regiões distantes, possivelmente pela ação dos ventos.*
+- *tratamento de valores ausentes utilizando imputação pela média;*
+- *padronização dos dados numéricos;*
+- *treinamento do modelo de regressão.*
 
-*Quando há degradação generalizada, o sistema recomenda intensificar ações de controle de emissões e ampliar o monitoramento local e regional.*
+*Essa abordagem garante que todas as etapas de preparação dos dados sejam aplicadas de forma consistente durante o treinamento e durante a execução das previsões.*
 
-*Quando as condições são favoráveis, o sistema recomenda manter o monitoramento contínuo da região.*
+### Modelos Preditivos
 
-*Caso nenhum cenário específico seja identificado, o sistema avalia os poluentes individualmente:*
+Foram implementados modelos supervisionados de regressão para previsão das seguintes variáveis agrícolas:
 
-- *NO₂ elevado → reduzir emissões veiculares e monitorar corredores de tráfego urbano*
-- *SO₂ elevado → investigar possíveis fontes industriais*
-- *CO elevado → monitorar combustão, queimadas e emissões por veículos*
+- *umidade do solo;*
+- *pH do solo;*
+- *nível de nutrientes;*
+- *produtividade esperada;*
+- *volume de irrigação.*
 
-*Essa lógica garante que a análise seja explicável, rastreável e alinhada ao objetivo do projeto, permitindo demonstrar como os dados locais e regionais são combinados para apoiar decisões ambientais e consequentemente auxiliar na regeneração da camada de ozônio.*
+### Métricas de Avaliação
+
+*O desempenho dos modelos é avaliado por meio das seguintes métricas:*
+
+***MAE (Mean Absolute Error)***
+
+*Representa o erro absoluto médio entre os valores previstos e os valores reais. Quanto menor o resultado, maior a precisão do modelo.*
+
+***MSE (Mean Squared Error)***
+
+*Calcula a média dos erros elevados ao quadrado, penalizando previsões com erros mais elevados.*
+
+***RMSE (Root Mean Squared Error)***
+
+*Representa a raiz quadrada do MSE e permite interpretar o erro médio utilizando a mesma unidade da variável prevista.*
+
+***R² (Coeficiente de Determinação)***
+
+*Indica o quanto o modelo consegue explicar a variação dos dados observados.*
+
+- *Próximo de 1 → excelente capacidade preditiva;*
+- *Próximo de 0 → baixa capacidade preditiva;*
+- *Abaixo de 0 → desempenho inferior a uma previsão baseada apenas na média dos dados.*
+
+### Execução das Previsões
+
+*As previsões utilizam o histórico armazenado no banco de dados para treinamento dos modelos e a leitura mais recente registrada como cenário atual.*
+
+*Os resultados representam um cenário agrícola estimado com base nos padrões aprendidos pelo modelo durante o treinamento, servindo como apoio à tomada de decisão relacionada à irrigação e ao manejo agrícola.*
 
 ## 🗄️ Integração com Supabase e Dashboard
 
