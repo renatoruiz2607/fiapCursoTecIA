@@ -42,6 +42,8 @@
 
 *Fase 4 está disponível em: **fiapCursoTecIA/fase4/cap1/fiapAgroSensorsIntelligence**.*
 
+*Fase 5 está disponível em: **fiapCursoTecIA/fase5/cap1/fiapAgroAnalytics**.*
+
 
 ## 📋 Licença
 
