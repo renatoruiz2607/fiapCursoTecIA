@@ -57,6 +57,7 @@ Dentre os arquivos presentes na raiz do projeto, definem-se:
 
 - <b>Listagem de Links</b>: Links do projeto (ex. vídeos da entrega, páginas, etc.),
    - Vídeo demonstrativo do Colab: [Assistir no YouTube](https://youtu.be/60Ev5qUVokM)
+   - Google Colab: [Open in Colab](https://colab.research.google.com/github/renatoruiz2607/fiapCursoTecIA/blob/dev/fase6/cap1/fiapAgroNeuralNetwork/RenatoRuiz_rm572235_pbl_fase6.ipynb)
 
 - <b>Explicação de decisões técnicas</b>:
    - O projeto utiliza PyTorch e TensorFlow/Keras para explorar duas abordagens distintas de Visão Computacional: detecção e localização de objetos com YOLOv5 e classificação de imagens com CNN.
