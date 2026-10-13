@@ -22,7 +22,7 @@
 
 ## 📜 Descrição
 
-*Este repositório contém os materiais organizados referentes ao **Capítulo 1 das Fases 2, 3 e 4** do curso de **Tecnologia em Inteligência Artificial**.*
+*Este repositório contém os materiais organizados referentes ao **Capítulo 1 das Fases 2, 3, 4, 5 e 6** do curso de **Tecnologia em Inteligência Artificial**.*
 
 
 ## 📁 Estrutura
@@ -43,6 +43,8 @@
 *Fase 4 está disponível em: **fiapCursoTecIA/fase4/cap1/fiapAgroSensorsIntelligence**.*
 
 *Fase 5 está disponível em: **fiapCursoTecIA/fase5/cap1/fiapAgroAnalytics**.*
+
+*Fase 6 está disponível em: **fiapCursoTecIA/fase6/cap1/fiapAgroNeuralNetwork**.*
 
 
 ## 📋 Licença
