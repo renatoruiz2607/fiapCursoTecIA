@@ -143,9 +143,9 @@ dataset {
 
 *O YOLOv5 adaptado com 60 épocas apresentou uma evolução na capacidade de reconhecimento dos objetos em comparação ao treinamento de 30 épocas, demonstrando maior confiança nas predições e conseguindo identificar um controle PS5 que anteriormente não havia sido detectado.*
 
-*Em imagens como controle_025.jpeg, controle_029.jpeg, controle_033.jpeg, garrafa_014.jpeg e garrafa_004.jpeg, os valores de confiança aumentaram, chegando a 0,8 em algumas detecções. Além disso, o modelo passou a identificar corretamente o controle presente em controle_041.jpeg, mesmo em um ambiente com vários elementos visuais.*
+*Em imagens como `controle_025.jpeg`, `controle_029.jpeg`, `controle_033.jpeg`, `garrafa_014.jpeg` e `garrafa_004.jpeg`, os valores de confiança aumentaram, chegando a 0,8 em algumas detecções. Além disso, o modelo passou a identificar corretamente o controle presente em `controle_041.jpeg`, mesmo em um ambiente com vários elementos visuais.*
 
-*Entretanto, o treinamento adicional também apresentou limitações. Na imagem garrafa_042.jpeg, o modelo identificou incorretamente a tampa de um eletrodoméstico como um controle PS5, com confiança de 0,4. Já em controle_014.jpeg, além de reconhecer o controle, gerou uma detecção adicional incorreta da classe garrafa térmica.*
+*Entretanto, o treinamento adicional também apresentou limitações. Na imagem `garrafa_042.jpeg`, o modelo identificou incorretamente a tampa de um eletrodoméstico como um controle PS5, com confiança de 0,4. Já em `controle_014.jpeg`, além de reconhecer o controle, gerou uma detecção adicional incorreta da classe garrafa térmica.*
 
 *Esses exemplos demonstram que o aumento do número de épocas contribuiu para melhorar a confiança e recuperar algumas detecções, mas não garantiu a eliminação de falsos positivos.*
 
@@ -156,9 +156,68 @@ dataset {
 </p>
 
 <p align="center">
-  <i>Figura 1 — YOLOv5 adaptado (60 épocas)</i>
+  <i>Figura 2 — YOLOv5 adaptado (60 épocas)</i>
 </p>
 
+*O YOLOv5 padrão, utilizando os pesos originais pré-treinados no dataset COCO, demonstrou capacidade de reconhecer diferentes objetos presentes nas imagens, mesmo sem ter sido adaptado às classes específicas do projeto.*
+
+*Na imagem `garrafa_014.jpeg`, o modelo identificou corretamente todos os objetos principais: uma garrafa térmica, classificada pela categoria genérica `bottle` com confiança de **86%**, duas cadeiras, com confiança de **45%** e **77%**, e uma mesa, identificada como `dining table` com confiança de **44%**. Esse resultado demonstra a capacidade do modelo pré-treinado de reconhecer e localizar múltiplos objetos de categorias diferentes em uma mesma imagem.*
+
+*Entretanto, na imagem `garrafa_042.jpeg`, o comportamento foi diferente. Embora a garrafa térmica estivesse visível sobre a bancada, o modelo não conseguiu identificá-la. Em contrapartida, classificou incorretamente um tubo de detergente como `bottle`, com confiança de **90%**, enquanto identificou corretamente a pia como `sink`, com confiança de **68%**.*
+
+*Esse segundo exemplo evidencia uma limitação importante: um valor elevado de confiança não garante que a identificação esteja correta. Apesar de apresentar **90%** de confiança na classe `bottle`, o modelo atribuiu essa classificação ao objeto errado, deixando de reconhecer a garrafa térmica presente na imagem.*
+
+*A comparação demonstra que o YOLOv5 padrão possui boa capacidade de reconhecimento de objetos genéricos, mas pode apresentar dificuldades diante de diferentes formatos, orientações e contextos visuais. Os resultados reforçam a importância do treinamento personalizado para adaptar o reconhecimento às características específicas dos objetos do projeto.*
+
+<p align="center">
+  <img src="assets/garrafa_014.jpeg" width="600"/>
+</p>
+
+<p align="center">
+  <i>Figura 3 — YOLOv5 padrão</i>
+</p>
+
+<p align="center">
+  <img src="assets/garrafa_042.jpeg" width="600"/>
+</p>
+
+<p align="center">
+  <i>Figura 4 — YOLOv5 padrão</i>
+</p>
+
+## 📝 Conclusão — Qual modelo escolher para cada aplicação?
+
+*Os experimentos demonstraram que não existe um único modelo superior para todas as situações. A escolha depende principalmente dos objetos que o cliente deseja reconhecer, da necessidade de localizá-los na imagem e da disponibilidade de dados para treinamento.*
+
+*Considerando os resultados obtidos, podemos apresentar três cenários de aplicação.*
+
+### Cenário 1 — Monitoramento e contagem de objetos genéricos
+
+***Exemplo de aplicação:** uma fazenda deseja instalar câmeras na passagem do gado para contar automaticamente quantos animais atravessam determinado ponto. Outro exemplo seria um sistema de vigilância que detecta a presença de pessoas em uma área restrita.*
+
+***Modelo recomendado:** YOLOv5 padrão (pré-treinado).*
+
+*O YOLOv5 padrão é uma escolha inicial interessante para esse cenário porque já foi treinado para reconhecer diversas categorias comuns, incluindo pessoas e vacas, sem exigir a criação de um dataset personalizado.*
+
+*Em nossos experimentos, esse modelo demonstrou capacidade de identificar simultaneamente diferentes objetos, como cadeiras, mesas, pias e garrafas, mesmo sem treinamento adicional. Isso evidencia sua utilidade em aplicações que envolvem categorias genéricas.*
+
+### Cenário 2 — Identificação de objetos específicos
+
+***Exemplo de aplicação:** uma empresa deseja automatizar a conferência de estoque por câmeras, identificando especificamente controles PS5 e garrafas térmicas, diferenciando esses produtos de outros objetos presentes no ambiente.*
+
+***Modelo recomendado:** YOLOv5 adaptado com 60 épocas, quando a aplicação exige detectar e localizar os produtos.*
+
+*O YOLOv5 padrão apresentou limitações no reconhecimento de objetos específicos, como o controle PS5. Já os modelos adaptados aprenderam as classes personalizadas, permitindo identificar e localizar os produtos por meio de caixas delimitadoras.*
+
+*Entre os treinamentos realizados, o modelo de 60 épocas apresentou melhor Precision geral no teste (96,0% contra 91,2%) e melhor mAP@0.5:0.95 (63,5% contra 51,1%), indicando melhor desempenho geral na precisão das detecções e na qualidade da localização.*
+
+*Por outro lado, o modelo de 30 épocas apresentou Recall superior (88,1% contra 80,0%) e ligeira vantagem no mAP@0.5 (88,8% contra 87,9%). Portanto, se o objetivo for minimizar objetos não detectados, o modelo de 30 épocas também merece consideração.*
+
+*A análise visual mostrou ainda que o modelo de 60 épocas recuperou algumas detecções ausentes no de 30 épocas, mas apresentou falsos positivos. Isso reforça que o treinamento adicional não garante melhores resultados em todos os casos.*
+
+### Cenário 3 — Classificação de fotografias individuais de produtos
+
+*Se a empresa precisasse apenas classificar fotografias individuais de produtos, sem localizar objetos na imagem, a CNN seria uma alternativa interessante. Ela alcançou 90% de acurácia, com treinamento mais rápido, mas não foi desenvolvida para detectar e contar múltiplos objetos.*
 
 ---
 
