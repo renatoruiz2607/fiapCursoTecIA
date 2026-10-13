@@ -134,11 +134,29 @@ dataset {
 *Os resultados demonstram que o treinamento de 30 épocas permitiu ao YOLOv5 aprender a identificar as classes personalizadas e localizar os objetos, embora ainda existam oportunidades de melhoria na confiança das predições e na detecção em diferentes condições visuais.*
 
 <p align="center">
-  <img src="assets/wokwiCircuit.png" width="600"/>
+  <img src="assets/val_batch0_pred.jpg" width="600"/>
 </p>
 
 <p align="center">
-  <i>Figura 1 — Diagrama do circuito simulado no Wokwi</i>
+  <i>Figura 1 — YOLOv5 adaptado (30 épocas)</i>
+</p>
+
+*O YOLOv5 adaptado com 60 épocas apresentou uma evolução na capacidade de reconhecimento dos objetos em comparação ao treinamento de 30 épocas, demonstrando maior confiança nas predições e conseguindo identificar um controle PS5 que anteriormente não havia sido detectado.*
+
+*Em imagens como controle_025.jpeg, controle_029.jpeg, controle_033.jpeg, garrafa_014.jpeg e garrafa_004.jpeg, os valores de confiança aumentaram, chegando a 0,8 em algumas detecções. Além disso, o modelo passou a identificar corretamente o controle presente em controle_041.jpeg, mesmo em um ambiente com vários elementos visuais.*
+
+*Entretanto, o treinamento adicional também apresentou limitações. Na imagem garrafa_042.jpeg, o modelo identificou incorretamente a tampa de um eletrodoméstico como um controle PS5, com confiança de 0,4. Já em controle_014.jpeg, além de reconhecer o controle, gerou uma detecção adicional incorreta da classe garrafa térmica.*
+
+*Esses exemplos demonstram que o aumento do número de épocas contribuiu para melhorar a confiança e recuperar algumas detecções, mas não garantiu a eliminação de falsos positivos.*
+
+*De modo geral, a comparação visual indica uma evolução do modelo com 60 épocas, embora evidencie a necessidade de avaliar não apenas a quantidade de detecções e seus níveis de confiança, mas também a correção das classes atribuídas e a ocorrência de identificações indevidas.*
+
+<p align="center">
+  <img src="assets/val_batch0_pred_60.jpg" width="600"/>
+</p>
+
+<p align="center">
+  <i>Figura 1 — YOLOv5 adaptado (60 épocas)</i>
 </p>
 
 
