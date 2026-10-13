@@ -121,9 +121,25 @@ dataset {
 *Todos os indicadores, estatísticas e valores podem mudar a cada build e a cada grupo de imagens.*
 
 
-## 💵 Análise imagens e resultados
+## 🔎 Análise visual das detecções
 
-*Foi realizada uma estimativa de custos On-Demand (100% de utilização) na AWS Pricing Calculator para uma máquina Linux simples, destinada a hospedar a API que receberia os dados dos sensores e executaria o modelo de Machine Learning.*
+*A visualização das predições do YOLOv5 adaptado com 30 épocas demonstra que o modelo conseguiu identificar e localizar controles PS5 e garrafas térmicas em diferentes perspectivas e ambientes.*
+
+*Das oito imagens apresentadas, seis possuem detecções, sendo quatro controles PS5 e duas garrafas térmicas. As caixas delimitadoras demonstram uma localização visualmente adequada dos objetos, com valores de confiança entre 0,4 e 0,6.*
+
+*Um aspecto positivo foi o reconhecimento dos controles PS5 em diferentes orientações, incluindo imagens da parte frontal e traseira, indicando que o modelo conseguiu aprender características relevantes do objeto.*
+
+*Entretanto, nas imagens controle_041.jpeg e garrafa_042.jpeg, que apresentam cenários com diversos elementos visuais, não foram realizadas detecções. Esse comportamento evidencia possíveis limitações do modelo em ambientes mais complexos.*
+
+*Os resultados demonstram que o treinamento de 30 épocas permitiu ao YOLOv5 aprender a identificar as classes personalizadas e localizar os objetos, embora ainda existam oportunidades de melhoria na confiança das predições e na detecção em diferentes condições visuais.*
+
+<p align="center">
+  <img src="assets/wokwiCircuit.png" width="600"/>
+</p>
+
+<p align="center">
+  <i>Figura 1 — Diagrama do circuito simulado no Wokwi</i>
+</p>
 
 
 ---
