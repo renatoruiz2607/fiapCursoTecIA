@@ -22,7 +22,7 @@
 
 ## 📜 Descrição
 
-*Este repositório contém os materiais organizados referentes ao **Capítulo 1 das Fases 2, 3, 4, 5 e 6** do curso de **Tecnologia em Inteligência Artificial**.*
+*Este repositório contém os materiais organizados referentes ao **Capítulo 1 das Fases 1, 2, 3, 4, 5 e 6** do curso de **Tecnologia em Inteligência Artificial**.*
 
 
 ## 📁 Estrutura
@@ -33,6 +33,8 @@
 ## 📌 Projeto Principal
 
 *A descrição completa dos projetos inclui arquitetura, implementação e documentação detalhada.*
+
+*Fase 1 está disponível em: **fiapCursoTecIA/fase1/fiapAgroInsightVinhedo**.*
 
 *Fase 2 está disponível em: **fiapCursoTecIA/fase2/cap1/fiapAgroSensorsVinhedo**.*
 
