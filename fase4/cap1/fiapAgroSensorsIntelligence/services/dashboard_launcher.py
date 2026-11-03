@@ -1,5 +1,10 @@
 import subprocess
 import sys
+from pathlib import Path
+
+
+PROJECT_DIR = Path(__file__).resolve().parents[1]
+DASHBOARD_PATH = PROJECT_DIR / "dashboard" / "app.py"
 
 
 def open_dashboard():
@@ -12,8 +17,9 @@ def open_dashboard():
                 "-m",
                 "streamlit",
                 "run",
-                "dashboard/app.py"
-            ]
+                str(DASHBOARD_PATH)
+            ],
+            cwd=PROJECT_DIR
         )
 
         print("Dashboard iniciado com sucesso.")

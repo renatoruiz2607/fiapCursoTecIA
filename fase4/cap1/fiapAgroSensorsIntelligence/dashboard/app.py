@@ -1,9 +1,17 @@
 import json
+import sys
 from pathlib import Path
 
 import joblib
 import pandas as pd
 import streamlit as st
+
+# Garante que os módulos da Fase 4 sejam encontrados
+# independentemente da pasta de onde o Streamlit for iniciado.
+PROJECT_DIR = Path(__file__).resolve().parents[1]
+
+if str(PROJECT_DIR) not in sys.path:
+    sys.path.insert(0, str(PROJECT_DIR))
 
 from ml.dataset_builder import load_sensor_dataset
 from ml.prediction_service import (
@@ -14,7 +22,7 @@ from ml.prediction_service import (
 )
 
 
-METRICS_PATH = Path("ml/metrics.json")
+METRICS_PATH = PROJECT_DIR / "ml" / "metrics.json"
 
 
 st.set_page_config(
@@ -217,6 +225,6 @@ st.markdown(
 st.line_chart(df["productivity_index"])
 
 st.caption(
-    "As previsões são geradas a partir dos modelos treinados com o histórico armazenado no banco Oracle. "
+    "As previsões são geradas a partir dos modelos treinados com o histórico armazenado no banco de dados SQLite. "
     "A última leitura registrada é utilizada como cenário atual para estimar as condições agrícolas futuras."
 )

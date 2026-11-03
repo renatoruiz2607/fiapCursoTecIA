@@ -1,9 +1,11 @@
 import csv
+from pathlib import Path
 
-from database.database import get_connection
+from database.database import get_connection, initialize_database
 
 
-CSV_PATH = "data/simulated_sensor_readings.csv"
+PROJECT_DIR = Path(__file__).resolve().parents[1]
+CSV_PATH = PROJECT_DIR / "data" / "simulated_sensor_readings.csv"
 
 
 def import_simulated_csv_to_database():
@@ -31,8 +33,9 @@ def import_simulated_csv_to_database():
                 })
 
         print(f"Registros encontrados no CSV: {len(rows)}")
-        print("Importando registros para o Oracle...")
+        print("Importando registros para o banco de dados SQLite...")
 
+        initialize_database()
         connection = get_connection()
         cursor = connection.cursor()
 
@@ -80,3 +83,7 @@ def import_simulated_csv_to_database():
     except Exception as error:
         print("\nErro ao importar CSV simulado.")
         print(f"Detalhe: {error}")
+
+
+if __name__ == "__main__":
+    import_simulated_csv_to_database()
