@@ -14,3 +14,7 @@ venv/
 
 # PlatformIO
 .pio/
+
+# Fase 6 - pesos intermediários e resultados gerados localmente
+last.pt
+fase6/cap1/fiapAgroNeuralNetwork/outputs/

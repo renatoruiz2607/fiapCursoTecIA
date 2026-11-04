@@ -9,8 +9,12 @@ Uso no terminal:
     python launcher.py list               -> lista os serviços disponíveis
     python launcher.py run <servico>      -> executa um serviço
     python launcher.py <servico>          -> atalho para "run"
+
+Argumentos extras são repassados ao serviço, por exemplo:
+    python launcher.py run fase6-yolo-60 --source minha_imagem.jpg
 """
 
+import importlib.util
 import os
 import shutil
 import subprocess
@@ -30,6 +34,7 @@ FASE1_DIR = ROOT_DIR / "fase1" / "fiapAgroInsightVinhedo"
 FASE2_DIR = ROOT_DIR / "fase2" / "cap1" / "fiapAgroSensorsVinhedo"
 FASE3_DIR = ROOT_DIR / "fase3" / "cap1" / "fiapAgroSensorsDashboard"
 FASE4_DIR = ROOT_DIR / "fase4" / "cap1" / "fiapAgroSensorsIntelligence"
+FASE6_DIR = ROOT_DIR / "fase6" / "cap1" / "fiapAgroNeuralNetwork"
 
 PYTHON = sys.executable
 
@@ -39,6 +44,7 @@ PHASES = {
     "Fase 2": "Agro Sensors Vinhedo",
     "Fase 3": "Agro Sensors Dashboard",
     "Fase 4": "Agro Sensors Intelligence",
+    "Fase 6": "Agro Neural Network",
 }
 
 # Tipos de execução:
@@ -61,6 +67,7 @@ class Service:
     kind: str = KIND_TASK
     requires: list = field(default_factory=list)
     env_vars: list = field(default_factory=list)
+    modules: list = field(default_factory=list)
     url: str = None
 
 
@@ -196,6 +203,46 @@ SERVICES = [
         kind=KIND_SERVER,
         url="http://localhost:8502",
     ),
+
+    # ============================
+    # FASE 6 - VISÃO COMPUTACIONAL
+    # ============================
+    Service(
+        key="fase6-yolo-60",
+        phase="Fase 6",
+        name="YOLOv5 adaptado (60 épocas)",
+        description="Detecta controle PS5 e garrafa térmica nas imagens de teste.",
+        command=[PYTHON, "src/vision_service.py", "--model", "yolo-60"],
+        cwd=FASE6_DIR,
+        modules=["torch"],
+    ),
+    Service(
+        key="fase6-yolo-30",
+        phase="Fase 6",
+        name="YOLOv5 adaptado (30 épocas)",
+        description="Mesma detecção com o modelo treinado por 30 épocas.",
+        command=[PYTHON, "src/vision_service.py", "--model", "yolo-30"],
+        cwd=FASE6_DIR,
+        modules=["torch"],
+    ),
+    Service(
+        key="fase6-yolo-coco",
+        phase="Fase 6",
+        name="YOLOv5 padrão (COCO)",
+        description="Detecção de objetos genéricos com os pesos originais, sem fine-tuning.",
+        command=[PYTHON, "src/vision_service.py", "--model", "yolo-coco"],
+        cwd=FASE6_DIR,
+        modules=["torch"],
+    ),
+    Service(
+        key="fase6-cnn",
+        phase="Fase 6",
+        name="CNN construída do zero",
+        description="Classifica cada imagem como controle PS5 ou garrafa térmica.",
+        command=[PYTHON, "src/vision_service.py", "--model", "cnn"],
+        cwd=FASE6_DIR,
+        modules=["tensorflow"],
+    ),
 ]
 
 SERVICES_BY_KEY = {service.key: service for service in SERVICES}
@@ -247,6 +294,13 @@ def check_requirements(service):
         if resolve_program(program) is None:
             problems.append(f"Programa '{program}' não encontrado no PATH.")
 
+    for module in service.modules:
+        if importlib.util.find_spec(module) is None:
+            problems.append(
+                f"Pacote Python '{module}' não instalado. "
+                "Execute: pip install -r requirements-vision.txt"
+            )
+
     for variable in service.env_vars:
         if not os.getenv(variable):
             problems.append(
@@ -260,7 +314,7 @@ def check_requirements(service):
     return problems
 
 
-def run_service(key, capture_output=False):
+def run_service(key, capture_output=False, extra_args=None):
     """
     Executa um serviço.
 
@@ -284,7 +338,7 @@ def run_service(key, capture_output=False):
     environment["PYTHONIOENCODING"] = "utf-8"
 
     # Usa o caminho completo do programa quando ele não está no PATH.
-    command = list(service.command)
+    command = list(service.command) + list(extra_args or [])
 
     if command[0] in service.requires:
         command[0] = resolve_program(command[0])
@@ -459,14 +513,23 @@ def main(arguments):
             print("Informe o serviço. Ex.: python launcher.py run fase4-treinar")
             return 1
         key = arguments[1]
+        extra_args = arguments[2:]
     else:
         key = arguments[0]
+        extra_args = arguments[1:]
+
+    # Caminhos relativos informados pelo usuário são convertidos para
+    # absolutos, pois cada serviço roda a partir da pasta da sua fase.
+    extra_args = [
+        str(Path(argument).resolve()) if Path(argument).exists() else argument
+        for argument in extra_args
+    ]
 
     try:
         service = get_service(key)
         print(f"\n>>> {service.phase} | {service.name}\n", flush=True)
 
-        result = run_service(key)
+        result = run_service(key, extra_args=extra_args)
 
         if service.kind == KIND_SERVER:
             print(f"Serviço iniciado em: {service.url}")
