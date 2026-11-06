@@ -28,6 +28,7 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
    - <code>irrigation_training_data.csv</code>: base de dados simulada utilizada para treinamento do modelo estatístico em R.
    - <code>irrigation_model.R</code>: implementa o modelo de regressão logística responsável por calcular a probabilidade de irrigação com base nas variáveis agrícolas.
    - <code>generate_irrigation_model_header.py</code>: executa o modelo em R e gera um arquivo header em C++ com o resultado da análise estatística.
+   - <code>serial_monitor.py</code>: lê os sensores do ESP32 pela porta serial exposta pelo Wokwi, exibe as leituras e a decisão de irrigação em português e envia os comandos de simulação (previsão de chuva e decisão do modelo em R). Adicionado no sistema integrado (Fase 7).
 
 - <b>src</b>: Contém todo o código fonte da aplicação embarcada no ESP32, organizado de forma modular:
    - <code>main.ino</code>: ponto de entrada do sistema, responsável pela orquestração das leituras, decisões e exibição dos dados no monitor serial.
@@ -44,6 +45,8 @@ Dentre os arquivos e pastas presentes na raiz do projeto, definem-se:
 - <b>platformio.ini</b>: Arquivo de configuração do PlatformIO, responsável por definir o ambiente de build, dependências e execução dos scripts de pré-processamento.
 
 - <b>diagram.json</b>: Define a configuração do circuito no Wokwi, incluindo ESP32, botões, sensores e conexões.
+
+- <b>wokwi.toml</b>: Arquivo de configuração da integração entre PlatformIO e simulador Wokwi. Expõe a porta serial <code>rfc2217://localhost:4001</code>, utilizada pelo <code>serial_monitor.py</code>.
 
 - <b>README.md</b>: Arquivo que apresenta uma visão geral do projeto, incluindo sua finalidade, estrutura e instruções de uso.
 
@@ -132,6 +135,19 @@ A simulação do circuito foi realizada utilizando a plataforma Wokwi, com integ
 *Modelo estatístico (R): r1 → força decisão de irrigar / r0 → força decisão de não irrigar / ra → retorna ao modo automático (resultado do modelo em R)* 
 
 *O sistema também permite simular diferentes cenários em tempo real via alteração dos níveis de umidade do solo e pH, a partir dos componentes no simulador Wokwi (diagram.json)*
+
+
+*Fase 5 - Leitura dos sensores pelo Python (sistema integrado)*
+
+*No sistema integrado, a leitura dos sensores e o envio dos comandos também podem ser feitos por um menu em Python, sem utilizar o Serial Monitor:*
+
+*Com o simulador Wokwi em execução, na raiz do repositório, execute `python launcher.py` e acesse 2 (Fase 2) > 4 - Menu dos sensores*
+
+*Ou, nesta pasta, execute `python scripts/serial_monitor.py`*
+
+*O menu permite exibir a leitura atual, monitorar as próximas leituras e enviar os comandos de previsão de chuva (1 e 0) e de decisão do modelo em R (r1, r0 e ra)*
+
+*Como o repositório é aberto pela raiz no sistema integrado, selecione esta configuração no VS Code com `>Wokwi: Select Config File` (arquivo `fase2/cap1/fiapAgroSensorsVinhedo/wokwi.toml`) antes de executar `>Wokwi: Start Simulator`*
 
 
 ## 🧠 Lógica de Decisão de Irrigação

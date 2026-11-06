@@ -1,0 +1,26 @@
+# Dependências da visão computacional (Fase 6)
+# Instalação: pip install -r requirements-vision.txt
+#
+# Recomenda-se Python 3.11 ou 3.12: o TensorFlow ainda pode não ter
+# versão disponível para as versões mais recentes do Python.
+
+-r requirements.txt
+
+# YOLOv5 (carregado via torch.hub a partir do repositório ultralytics/yolov5)
+torch>=2.0.0
+torchvision>=0.15.0
+ultralytics>=8.2.34
+opencv-python>=4.8.0
+pillow>=10.3.0
+pyyaml>=5.3.1
+requests>=2.32.2
+scipy>=1.10.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+gitpython>=3.1.30
+psutil
+tqdm>=4.66.3
+setuptools>=70.0.0
+
+# CNN (Keras)
+tensorflow>=2.16.0

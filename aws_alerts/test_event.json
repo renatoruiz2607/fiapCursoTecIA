@@ -1,0 +1,14 @@
+{
+    "source": "sensors",
+    "reading": {
+        "soil_moisture": 22.0,
+        "ph": 4.8,
+        "nutrients_level": 35.0,
+        "luminosity": 60.0,
+        "temperature": 36.5,
+        "air_humidity": 30.0,
+        "productivity_index": 32.0,
+        "irrigation_volume": 0.0,
+        "created_at": "teste manual pelo console da AWS"
+    }
+}

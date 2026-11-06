@@ -1,8 +1,12 @@
-import serial
+import os
 import time
 
+import serial
 
-SERIAL_PORT = "rfc2217://localhost:4000"
+
+# Porta padrão exposta pelo simulador Wokwi (rfc2217ServerPort no wokwi.toml).
+# Pode ser alterada pela variável SENSOR_SERIAL_PORT para usar um ESP32 físico.
+SERIAL_PORT = os.getenv("SENSOR_SERIAL_PORT") or "rfc2217://localhost:4000"
 BAUD_RATE = 115200
 
 
@@ -45,4 +49,12 @@ def read_current_sensor_data():
     except Exception as error:
         print("\nNão foi possível ler os sensores pela serial.")
         print(f"Detalhe: {error}")
+
+        if "Connection refused" in str(error):
+            print("\nO simulador Wokwi não está em execução.")
+            print("1. Compile o firmware da Fase 4 (launcher: Fase 4 > Compilar firmware ESP32).")
+            print("2. No VS Code, execute 'Wokwi: Select Config File' e escolha o")
+            print("   wokwi.toml da pasta fase4/cap1/fiapAgroSensorsIntelligence.")
+            print("3. Execute 'Wokwi: Start Simulator' e tente novamente.")
+
         return None
