@@ -35,6 +35,9 @@ FASE2_DIR = ROOT_DIR / "fase2" / "cap1" / "fiapAgroSensorsVinhedo"
 FASE3_DIR = ROOT_DIR / "fase3" / "cap1" / "fiapAgroSensorsDashboard"
 FASE4_DIR = ROOT_DIR / "fase4" / "cap1" / "fiapAgroSensorsIntelligence"
 FASE6_DIR = ROOT_DIR / "fase6" / "cap1" / "fiapAgroNeuralNetwork"
+ALERTS_DIR = ROOT_DIR / "aws_alerts"
+
+AWS_ENV_VARS = ["AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_DEFAULT_REGION"]
 
 PYTHON = sys.executable
 
@@ -45,6 +48,7 @@ PHASES = {
     "Fase 3": "Agro Sensors Dashboard",
     "Fase 4": "Agro Sensors Intelligence",
     "Fase 6": "Agro Neural Network",
+    "Alertas AWS": "FarmTech Monitor",
 }
 
 # Tipos de execução:
@@ -155,8 +159,16 @@ SERVICES = [
         key="fase4-importar-csv",
         phase="Fase 4",
         name="Importar leituras simuladas",
-        description="Popula o banco com o histórico simulado de leituras dos sensores.",
+        description="Popula o banco com o histórico simulado (não duplica se já importado).",
         command=[PYTHON, "-m", "services.csv_import_service"],
+        cwd=FASE4_DIR,
+    ),
+    Service(
+        key="fase4-reimportar-csv",
+        phase="Fase 4",
+        name="Limpar banco e reimportar CSV",
+        description="Apaga todas as leituras e importa o CSV simulado do zero (pede confirmação).",
+        command=[PYTHON, "-m", "services.csv_import_service", "--reset"],
         cwd=FASE4_DIR,
     ),
     Service(
@@ -243,6 +255,38 @@ SERVICES = [
         cwd=FASE6_DIR,
         modules=["tensorflow"],
     ),
+
+    # ============================
+    # ALERTAS - MENSAGERIA AWS
+    # ============================
+    Service(
+        key="alertas-ultima-leitura",
+        phase="Alertas AWS",
+        name="Enviar alerta da última leitura",
+        description="Envia a última leitura do banco à Lambda, que avalia e dispara o e-mail (SNS).",
+        command=[PYTHON, "aws_alerts/alert_client.py", "--latest"],
+        cwd=ROOT_DIR,
+        modules=["boto3"],
+        env_vars=AWS_ENV_VARS,
+    ),
+    Service(
+        key="alertas-teste",
+        phase="Alertas AWS",
+        name="Enviar alerta de teste (leitura crítica)",
+        description="Envia uma leitura simulada com vários problemas para validar o serviço.",
+        command=[PYTHON, "aws_alerts/alert_client.py", "--test"],
+        cwd=ROOT_DIR,
+        modules=["boto3"],
+        env_vars=AWS_ENV_VARS,
+    ),
+    Service(
+        key="alertas-previa",
+        phase="Alertas AWS",
+        name="Prévia do alerta da última leitura",
+        description="Mostra os alertas e o e-mail que seriam enviados, sem acessar a AWS.",
+        command=[PYTHON, "aws_alerts/alert_client.py", "--latest", "--preview"],
+        cwd=ROOT_DIR,
+    ),
 ]
 
 SERVICES_BY_KEY = {service.key: service for service in SERVICES}
@@ -296,9 +340,14 @@ def check_requirements(service):
 
     for module in service.modules:
         if importlib.util.find_spec(module) is None:
+            requirements_file = (
+                "requirements-vision.txt"
+                if module in ("torch", "tensorflow")
+                else "requirements.txt"
+            )
             problems.append(
                 f"Pacote Python '{module}' não instalado. "
-                "Execute: pip install -r requirements-vision.txt"
+                f"Execute: pip install -r {requirements_file}"
             )
 
     for variable in service.env_vars:
