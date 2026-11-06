@@ -16,8 +16,8 @@ def get_latest_sensor_reading():
             productivity_index,
             irrigation_volume
         FROM sensor_readings
-        ORDER BY created_at DESC
-        FETCH FIRST 1 ROWS ONLY
+        ORDER BY id DESC
+        LIMIT 1
     """)
 
     row = cursor.fetchone()

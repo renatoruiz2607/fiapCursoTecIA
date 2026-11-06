@@ -30,7 +30,7 @@ def load_sensor_dataset():
             irrigation_volume,
             fertilization_need
         FROM sensor_readings
-        ORDER BY created_at
+        ORDER BY id
     """
 
     dataframe = pd.read_sql(query, connection)

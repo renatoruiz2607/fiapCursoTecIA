@@ -15,8 +15,9 @@ from sklearn.preprocessing import StandardScaler
 from ml.dataset_builder import load_sensor_dataset, validate_dataset
 
 
-TRAINED_MODELS_DIR = Path("ml/trained_models")
-METRICS_PATH = Path("ml/metrics.json")
+ML_DIR = Path(__file__).resolve().parent
+TRAINED_MODELS_DIR = ML_DIR / "trained_models"
+METRICS_PATH = ML_DIR / "metrics.json"
 
 TARGETS = {
     "soil_moisture": {

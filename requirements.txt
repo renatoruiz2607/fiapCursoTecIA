@@ -1,0 +1,24 @@
+# Dependências Python do sistema integrado (Fases 1, 2, 3, 4 e 6)
+# Instalação: pip install -r requirements.txt
+
+# Configuração e utilitários
+python-dotenv>=1.0.0
+
+# Dados e Machine Learning (Fases 3 e 4)
+pandas>=2.0.0
+numpy>=1.26.0
+scikit-learn>=1.4.0
+joblib
+
+# Dashboards (Fases 3 e 4 e dashboard integrada)
+streamlit>=1.50.0
+
+# Comunicação serial com o ESP32 simulado no Wokwi (Fase 4)
+pyserial>=3.5
+
+# Serviço de alerta na AWS (Lambda + SNS)
+boto3>=1.34.0
+
+# Dependências externas (instalar separadamente):
+# - R (Rscript) com o pacote jsonlite: Fases 1 e 2
+# - PlatformIO (pio) e Wokwi Simulator no VS Code: Fases 2 e 4

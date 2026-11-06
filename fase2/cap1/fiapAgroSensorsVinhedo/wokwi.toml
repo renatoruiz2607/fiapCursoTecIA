@@ -2,3 +2,7 @@
 version = 1
 elf = ".pio/build/esp32/firmware.elf"
 firmware = ".pio/build/esp32/firmware.bin"
+
+# Porta serial exposta para leitura pelo Python (scripts/serial_monitor.py).
+# A Fase 4 utiliza a porta 4000; a Fase 2 utiliza a 4001.
+rfc2217ServerPort = 4001

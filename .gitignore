@@ -1,1 +1,20 @@
 .DS_Store
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Variáveis de ambiente
+.env
+
+# Banco de dados SQLite local
+*.db
+
+# PlatformIO
+.pio/
+
+# Fase 6 - pesos intermediários e resultados gerados localmente
+last.pt
+fase6/cap1/fiapAgroNeuralNetwork/outputs/

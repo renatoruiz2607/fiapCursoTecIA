@@ -6,7 +6,7 @@ import pandas as pd
 from database.sensor_reading_repository import get_latest_sensor_reading
 
 
-TRAINED_MODELS_DIR = Path("ml/trained_models")
+TRAINED_MODELS_DIR = Path(__file__).resolve().parent / "trained_models"
 
 MODEL_FILES = {
     "soil_moisture": "soil_moisture_model.pkl",
@@ -122,3 +122,7 @@ def execute_agricultural_prediction():
     print("\nRecomendação futura:")
     print("--------------------------------------")
     print(future_recommendation)
+
+
+if __name__ == "__main__":
+    execute_agricultural_prediction()
