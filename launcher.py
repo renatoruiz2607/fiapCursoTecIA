@@ -134,6 +134,25 @@ SERVICES = [
         requires=["pio", "Rscript"],
         env_vars=["OPENWEATHER_API_KEY"],
     ),
+    Service(
+        key="fase2-leitura",
+        phase="Fase 2",
+        name="Ler sensores do ESP32",
+        description="Exibe a leitura atual do ESP32 (requer o simulador Wokwi da Fase 2 em execução).",
+        command=[PYTHON, "scripts/serial_monitor.py", "--once"],
+        cwd=FASE2_DIR,
+        modules=["serial"],
+    ),
+    Service(
+        key="fase2-menu",
+        phase="Fase 2",
+        name="Menu dos sensores (ESP32/Wokwi)",
+        description="Leitura, monitoramento e comandos de chuva e do modelo R (requer o Wokwi em execução).",
+        command=[PYTHON, "scripts/serial_monitor.py"],
+        cwd=FASE2_DIR,
+        kind=KIND_INTERACTIVE,
+        modules=["serial"],
+    ),
 
     # ============================
     # FASE 3 - BANCO DE DADOS

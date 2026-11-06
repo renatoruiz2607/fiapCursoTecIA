@@ -153,7 +153,16 @@ if result:
         st.stop()
 
     output_dir = OUTPUTS_DIR / result["model"]
-    summary = json.loads((output_dir / "detections.json").read_text(encoding="utf-8"))
+    summary_path = output_dir / "detections.json"
+
+    # A pasta outputs pode ser apagada a qualquer momento; nesse caso,
+    # o resultado anterior é descartado e o modelo precisa ser executado de novo.
+    if not summary_path.exists():
+        st.session_state.pop("vision_result", None)
+        st.info("Os resultados anteriores foram removidos. Execute o modelo novamente.")
+        st.stop()
+
+    summary = json.loads(summary_path.read_text(encoding="utf-8"))
 
     st.success(f"{summary['model_label']} · executado em {summary['generated_at']}")
 
