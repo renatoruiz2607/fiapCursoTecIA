@@ -6,6 +6,7 @@ seja pelo terminal ou pela dashboard (que reutiliza as funções deste módulo).
 
 Uso no terminal:
     python launcher.py                    -> abre o menu interativo por fase
+    python launcher.py dashboard          -> abre a dashboard integrada
     python launcher.py list               -> lista os serviços disponíveis
     python launcher.py run <servico>      -> executa um serviço
     python launcher.py <servico>          -> atalho para "run"
@@ -49,6 +50,7 @@ PHASES = {
     "Fase 4": "Agro Sensors Intelligence",
     "Fase 6": "Agro Neural Network",
     "Alertas AWS": "FarmTech Monitor",
+    "Dashboard": "Sistema Integrado",
 }
 
 # Tipos de execução:
@@ -73,6 +75,9 @@ class Service:
     env_vars: list = field(default_factory=list)
     modules: list = field(default_factory=list)
     url: str = None
+    # Confirmação exigida na dashboard e argumentos que a dispensam no script.
+    confirm: str = None
+    confirm_args: list = field(default_factory=list)
 
 
 SERVICES = [
@@ -170,6 +175,8 @@ SERVICES = [
         description="Apaga todas as leituras e importa o CSV simulado do zero (pede confirmação).",
         command=[PYTHON, "-m", "services.csv_import_service", "--reset"],
         cwd=FASE4_DIR,
+        confirm="Todas as leituras do banco, inclusive as salvas pelos sensores, serão apagadas.",
+        confirm_args=["--yes"],
     ),
     Service(
         key="fase4-treinar",
@@ -287,6 +294,20 @@ SERVICES = [
         command=[PYTHON, "aws_alerts/alert_client.py", "--latest", "--preview"],
         cwd=ROOT_DIR,
     ),
+
+    # ============================
+    # DASHBOARD INTEGRADA
+    # ============================
+    Service(
+        key="dashboard",
+        phase="Dashboard",
+        name="Dashboard integrada",
+        description="Painel único com sensores, previsões, serviços, visão computacional e alertas.",
+        command=[PYTHON, "-m", "streamlit", "run", "dashboard/app.py", "--server.port", "8501"],
+        cwd=ROOT_DIR,
+        kind=KIND_SERVER,
+        url="http://localhost:8501",
+    ),
 ]
 
 SERVICES_BY_KEY = {service.key: service for service in SERVICES}
@@ -400,6 +421,8 @@ def run_service(key, capture_output=False, extra_args=None):
         cwd=service.cwd,
         env=environment,
         capture_output=capture_output,
+        # Sem terminal (ex.: dashboard), nenhuma entrada é aguardada.
+        stdin=subprocess.DEVNULL if capture_output else None,
         text=True,
     )
 
